@@ -1,7 +1,7 @@
 h1 WearScript Contrib
 ul
   - data.shared.each do |category, apps|
-    h1 = link_to category, "/categories/#{category}"
+    h1 = link_to category, "/categories/#{category}.html"
     ul
       - apps.each do |name, app|
-        li = link_to name, "/apps/#{name}"
+        li = link_to name, "/apps/#{name}.html"
