@@ -33,7 +33,6 @@ def get_app name
 end
 
 def get_json path
-  puts path
   contents =  File.open(path).read
   return JSON.parse(contents)
 end

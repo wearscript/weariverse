@@ -1,16 +1,17 @@
-"SugarGlider": {
-  "authors": [ //G+ identities
-    'kurtisnelson@gmail.com',
+{
+  "name": "SugarGlider",
+  "authors": [
+    "kurtisnelson@gmail.com"
   ],
 
   "description": "Shows a live Glass-friendly top down view",
-  "screenshots": [ //Filenames of screenshots
+  "screenshots": [
   ],
 
-  "require": [ //Other ws-contrib we should install
+  "require": [
   ],
 
-  "includes": [ //Other files that should be loadable in the webview
+  "includes": [
   ],
 
   "tags": [
@@ -18,6 +19,6 @@
     "mapping",
     "compass",
     "gps",
-    "google-maps",
+    "google-maps"
   ]
 }

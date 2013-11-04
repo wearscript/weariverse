@@ -1,6 +1,8 @@
-"ScriptName": { //Name shown in launcher, should be pretty version of folder name
+// REMOVE ALL COMMENTS OR JSON WILL BE INVALID
+{
+  "name": "ScriptName", //Name shown in launcher, should be pretty version of folder name
   "authors": [ //G+ identities
-    'you@example.com',
+    "you@example.com"
   ],
 
   "description": "Does something awesome",
@@ -14,6 +16,6 @@
   ],
 
   "tags": [
-    "hello-world",
+    "hello-world"
   ]
 }
