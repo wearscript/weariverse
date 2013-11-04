@@ -1,16 +1,17 @@
-"Compass": {
-  "authors": [ //G+ identities
-    'kurtisnelson@gmail.com'
+{
+  "name": "Compass",
+  "authors": [
+    "kurtisnelson@gmail.com"
   ],
 
   "description": "Shows a live compass",
-  "screenshots": [ //Filenames of screenshots
+  "screenshots": [
   ],
 
-  "require": [ //Other ws-contrib we should install
+  "require": [
   ],
 
-  "includes": [ //Other files that should be loadable in the webview
+  "includes": [
   ],
 
   "tags": [
