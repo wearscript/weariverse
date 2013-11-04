@@ -1,6 +1,6 @@
 "Compass": {
   "authors": [ //G+ identities
-    'kurtisnelson@gmail.com',
+    'kurtisnelson@gmail.com'
   ],
 
   "description": "Shows a live compass",
@@ -16,6 +16,6 @@
   "tags": [
     "navigation",
     "mapping",
-    "compass",
+    "compass"
   ]
 }

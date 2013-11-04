@@ -1,6 +1,6 @@
 "SugarGlider": {
   "authors": [ //G+ identities
-    'kurtisnelson@gmail.com',
+    'kurtisnelson@gmail.com'
   ],
 
   "description": "Shows a live Glass-friendly top down view",
@@ -18,6 +18,6 @@
     "mapping",
     "compass",
     "gps",
-    "google-maps",
+    "google-maps"
   ]
 }

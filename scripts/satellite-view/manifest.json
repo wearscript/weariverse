@@ -1,6 +1,6 @@
 "Satellite View": {
   "authors": [ //G+ identities
-    'kurtisnelson@gmail.com',
+    'kurtisnelson@gmail.com'
   ],
 
   "description": "Shows a live satellite view of where you are using Google Maps",
@@ -18,6 +18,6 @@
     "mapping",
     "gps",
     "compass",
-    "google-maps",
+    "google-maps"
   ]
 }
