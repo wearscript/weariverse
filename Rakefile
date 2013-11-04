@@ -1,10 +1,12 @@
 require 'middleman-gh-pages'
+require 'fileutils'
 require 'json'
 WS_REPO_NAME="openshades/wearscript-contrib"
 task :default => [:apps, :publish]
 
 task :apps do
   apps = all_categories
+  FileUtils.mkdir_p 'data'
   File.open('data/shared.yml', 'w') {|f| f.write(apps.to_yaml)}
 end
 
