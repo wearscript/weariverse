@@ -1,4 +1,5 @@
 require 'middleman-gh-pages'
+require 'json'
 WS_REPO_NAME="openshades/wearscript-contrib"
 task :default => [:apps, :publish]
 
@@ -32,9 +33,7 @@ def get_app name
 end
 
 def get_json path
-  require 'json'
-  require 'net/http'
-  uri = URI("https://raw.github.com/#{WS_REPO_NAME}/master/#{path}")
-  contents = Net::HTTP.get(uri)
+  puts path
+  contents =  File.open(path).read
   return JSON.parse(contents)
 end
