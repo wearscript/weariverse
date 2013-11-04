@@ -1,0 +1,21 @@
+"Compass": {
+  "authors": [ //G+ identities
+    'kurtisnelson@gmail.com',
+  ],
+
+  "description": "Shows a live compass",
+  "screenshots": [ //Filenames of screenshots
+  ],
+
+  "require": [ //Other ws-contrib we should install
+  ],
+
+  "includes": [ //Other files that should be loadable in the webview
+  ],
+
+  "tags": [
+    "navigation",
+    "mapping",
+    "compass",
+  ]
+}
