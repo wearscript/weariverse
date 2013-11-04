@@ -1,8 +1,17 @@
 ---
-title: Welcome to Middleman
+title: WearScript Contrib
 ---
-
-.welcome
-  h1 Middleman is Watching</h1>
-  p.doc
-    = link_to "Read Online Documentation", "http://middlemanapp.com/"
+h1 WearScript Contrib
+ul
+  - data.shared.each do |category, apps|
+    h1 = category
+    - apps.each do |name, app|
+      h2 = name
+      ol
+        - app.authors.each do |author|
+          li = author
+      p = app.description
+      = link_to "Load", app.app_uri
+      ul
+        - app.tags.each do |tag|
+          li = tag
