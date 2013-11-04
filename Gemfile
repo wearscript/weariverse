@@ -1,3 +1,4 @@
-source 'https://rubygems.org'
-gem 'github-pages'
-gem 'rake'
+source "https://rubygems.org"
+
+gem "middleman"
+gem "middleman-gh-pages"
