@@ -1,0 +1,74 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+function cb(data) {
+    if(data['type'] == 3){
+        degrees = data['values'][0];
+        render();
+    }else if(data['type'] == -1){
+      lat = data['values'][0];
+      lng = data['values'][1];
+      updatedLocation();
+    }
+}
+ 
+function server() {
+    WS.sensorOn(3, .1);
+    WS.sensorOn(-1, 15);
+    WS.sensorCallback("cb");
+    init();
+}
+ 
+// Global variable
+var ctx = null,
+  map = null,
+  degrees = 0,
+  lat = 0,
+  lng = 0;
+ 
+function updatedLocation() {
+  var url = "http://maps.googleapis.com/maps/api/staticmap?v=3.exp&center=" +
+                        lat + "," + lng +
+                        "&zoom=17&size=640x640&maptype=roadmap&markers=color:green%7Clabel:G%7C" +
+                        lat + "," + lng +
+                        "&sensor=true&visual_refresh=true" +
+                        "&style=feature:road.local%7Celement:geometry%7Ccolor:0x009900%7Cweight:1%7Cvisibility:on&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0x000000%7Cvisibility:on&style=feature:administrative%7Celement:labels%7Cweight:3.9%7Cvisibility:on%7Cinvert_lightness:true&style=feature:poi%7Cvisibility:simplified";
+  var newMap = new Image();
+  newMap.src = url;
+  newMap.onload = mapLoaded(newMap);
+}
+ 
+    function mapLoaded(newMap) {
+    map = newMap;
+    }
+ 
+function render() {
+  ctx.save();
+  ctx.translate(320, 180);
+  ctx.rotate(-1 * degrees * (Math.PI / 180));
+  ctx.translate(-320, -320);
+  ctx.drawImage(map, 0, 0);
+  ctx.restore();
+}
+ 
+function init() {
+  var canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  ctx.font="80px Roboto";
+  ctx.fillText("Loading...",180,180);
+  map = new Image();
+}
+ 
+ 
+$(function () {
+    WS.serverConnect('{{WSUrl}}', 'server');
+   WS.displayWebView();
+});
+</script>
+</body>
+</html>
