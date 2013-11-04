@@ -5,7 +5,7 @@ task :default => [:apps, :publish]
 
 task :apps do
   apps = all_categories
-  File.open('data/apps.yml', 'w') {|f| f.write(apps.to_yaml)}
+  File.open('data/shared.yml', 'w') {|f| f.write(apps.to_yaml)}
 end
 
 def all_categories
