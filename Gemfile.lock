@@ -36,6 +36,7 @@ GEM
     pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
+    rake (10.1.0)
     rdiscount (1.6.8)
     redcarpet (2.2.2)
     safe_yaml (0.7.1)
@@ -47,3 +48,4 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  rake
