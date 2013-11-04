@@ -1,0 +1,9 @@
+h2 = name
+ol
+  - app.authors.each do |author|
+    li = author
+p = app.description
+= link_to "Load", app.app_uri
+ul
+  - app.tags.each do |tag|
+    li = tag

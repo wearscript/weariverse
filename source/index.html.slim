@@ -1,17 +1,7 @@
----
-title: WearScript Contrib
----
 h1 WearScript Contrib
 ul
   - data.shared.each do |category, apps|
-    h1 = category
-    - apps.each do |name, app|
-      h2 = name
-      ol
-        - app.authors.each do |author|
-          li = author
-      p = app.description
-      = link_to "Load", app.app_uri
-      ul
-        - app.tags.each do |tag|
-          li = tag
+    h1 = link_to category, "/categories/#{category}"
+    ul
+      - apps.each do |name, app|
+        li = link_to name, "/apps/#{name}"
