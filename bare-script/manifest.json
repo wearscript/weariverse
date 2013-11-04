@@ -1,0 +1,19 @@
+"ScriptName": { //Name shown in launcher, should be pretty version of folder name
+  "authors": [ //G+ identities
+    'you@example.com',
+  ],
+
+  "description": "Does something awesome",
+  "screenshots": [ //Filenames of screenshots
+  ],
+
+  "require": [ //Other ws-contrib we should install
+  ],
+
+  "includes": [ //Other files that should be loadable in the webview
+  ],
+
+  "tags": [
+    "hello-world",
+  ]
+}
