@@ -1,0 +1,68 @@
+<html style="width:100%; height:100%; overflow:hidden">
+        <head>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+                <script>
+ 
+                        // Global variable
+var map, marker,
+  degrees = 0,
+  myLatlng;
+ 
+function cb(data) {
+if(data['type'] == 3){
+        degrees = data['values'][0];
+        map.setHeading(degrees);
+}else if(data['type'] == -1){
+        var lat = data['values'][0];
+        var lng = data['values'][1];
+            myLatlng = new google.maps.LatLng(lat, lng);
+        map.setCenter(myLatlng);
+      marker.setPosition(myLatlng);
+        WS.log("lat: "+lat+" lng: "+lng);
+}
+}
+ 
+function initialize() {
+        WS.sensorOn(3, 1);
+        WS.sensorOn(-1, 15);
+        WS.sensorCallback("cb");
+}
+ 
+function initializeMap() {
+        var mapOptions = {
+                zoom: 18,
+                center: myLatlng,
+                disableDefaultUI: true,
+                tilt: 45,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+        }
+        myLatlng = new google.maps.LatLng(45.518970, -122.672899);
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+      marker = new google.maps.Marker({
+          map: map,
+          title: 'Glass'
+      });
+        WS.log("maps intialized");
+}
+ 
+$(function () {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=initializeMap';
+        document.body.appendChild(script);
+        WS.serverConnect('{{WSUrl}}', 'initialize');
+        WS.displayWebView();
+});
+</script>
+<style>
+        #map-canvas, #map_canvas {
+                height: 360px;
+                width: 640px;
+          }
+ </style>
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+        <div id="map-canvas" width="640" height="360" style="display:block"></div>
+</body>
+</html>

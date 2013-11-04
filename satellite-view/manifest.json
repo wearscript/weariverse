@@ -1,0 +1,23 @@
+"Satellite View": {
+  "authors": [ //G+ identities
+    'kurtisnelson@gmail.com',
+  ],
+
+  "description": "Shows a live satellite view of where you are using Google Maps",
+  "screenshots": [ //Filenames of screenshots
+  ],
+
+  "require": [ //Other ws-contrib we should install
+  ],
+
+  "includes": [ //Other files that should be loadable in the webview
+  ],
+
+  "tags": [
+    "navigation",
+    "mapping",
+    "gps",
+    "compass",
+    "google-maps",
+  ]
+}
