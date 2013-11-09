@@ -1,0 +1,15 @@
+{
+  "name": "Image Panning Sample",
+  "authors": [
+    "Scott Greenwald, @swgreen on github"
+  ],
+
+  "description": "Head motion pans around an image of the inside of the Sagrada Familia Basilica in Barcelona.",
+
+  "require": [ "rotationVectorUtil.js"
+  ],
+
+  "tags": [
+    "image pan"
+  ]
+}
