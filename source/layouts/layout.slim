@@ -2,13 +2,25 @@ html
   head
     meta charset="utf-8"
     meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"
-
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
     title
-      = data.page.title || "WearScript Contrib"
+      = data.page.title || yield_content(:title) || "Weariverse"
 
-    = stylesheet_link_tag "normalize", "all"
+    = stylesheet_link_tag "all"
     = javascript_include_tag  "all"
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
 
   body class="#{page_classes}"
-    = link_to "Home", "/"
-    = yield
+    .container
+      .masthead
+        h3.text-muted Weariverse
+        ul.nav.nav-justified
+          li = link_to "Scripts", "/"
+          li = link_to "Tutorial", "/tutorial"
+      = yield
+      .footer
+        p OpenShades
