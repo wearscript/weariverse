@@ -10,14 +10,6 @@
   ],
 
   "description": "Shows a live Glass-friendly top down view",
-  "screenshots": [
-  ],
-
-  "require": [
-  ],
-
-  "includes": [
-  ],
 
   "tags": [
     "navigation",

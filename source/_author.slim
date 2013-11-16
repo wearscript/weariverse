@@ -1,3 +1,9 @@
-span.name = link_to author.name, author.url
-span.email = author.email
-span.github = link_to "@#{author.github}", "http://github.com/#{author.github}"
+.author
+  - if author.name
+    span.name = link_to author.name, author.url
+  - elsif author.url
+    span.name = link_to author.url, author.url
+  - if author.email
+    span.email = author.email
+  - if author.github
+    span.github = link_to author.github, "http://github.com/#{author.github}"

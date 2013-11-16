@@ -12,15 +12,6 @@
 
   "description": "Shows a live compass",
 
-  "screenshots": [
-  ],
-
-  "require": [
-  ],
-
-  "includes": [
-  ],
-
   "tags": [
     "navigation",
     "mapping",

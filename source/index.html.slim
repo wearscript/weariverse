@@ -4,5 +4,13 @@
     .row
   - row_counter += 1
   .col-md-4
-    = partial :app_card, locals: {app: app}
-    = link_to "More", "/apps/#{id}.html"
+    .app-card
+      .panel.panel-primary
+        .panel-heading
+          h3.panel-title= app.name
+        .panel-body= partial :app_card, locals: {app: app}
+        .panel-footer
+          ul.nav.nav-pills
+            li = link_to "Wear"
+            li = link_to "Source", app.app_uri
+            li = link_to "More", "/apps/#{id}.html"

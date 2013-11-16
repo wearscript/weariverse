@@ -10,14 +10,6 @@
   ],
 
   "description": "Shows a live satellite view of where you are using Google Maps",
-  "screenshots": [
-  ],
-
-  "require": [
-  ],
-
-  "includes": [
-  ],
 
   "tags": [
     "navigation",
