@@ -6,10 +6,16 @@
     .label
       margin: 1px
   .author
+    min-height: 64px
+    padding: 0
+    .avatar
+      float: left
+      margin-right: 5px
     .name, .email, .github
       display:inline
-    .email
-      float: right
+    .email:before
+      content: "\A"
+      white-space: pre
     .github:before
-      content: "\A" image-url('github.png')
+      content: "\A" image-url('github.png') " "
       white-space: pre

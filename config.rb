@@ -42,10 +42,11 @@ end
 ###
 
 # Automatic image dimensions on image_tag helper
-# activate :automatic_image_sizes
+activate :automatic_image_sizes
 
+require 'gravatar_image_tag'
 # Methods defined in the helpers block are available in templates
-# helpers do
+helpers GravatarImageTag::InstanceMethods
 #   def some_helper
 #     "Helping"
 #   end

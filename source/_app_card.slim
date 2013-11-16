@@ -8,6 +8,6 @@ p = app.description
 
 - if app.video
   iframe.video src="//www.youtube.com/embed/#{app.video}" allowfullscreen frameborder="0"
-.tag-cloud
+//.tag-cloud
   - app.tags.each do |tag|
     .label.label-default = tag
