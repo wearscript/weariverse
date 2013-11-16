@@ -1,0 +1,10 @@
+h2 = app.name
+- app.authors.each do |author|
+  = partial :author, locals: {author: author}
+p
+  a.btn.btn-default href="#" role="button" Wear
+  a.btn.btn-default href="#{app.app_uri}" role="button" Source
+p = app.description
+ul
+  - app.tags.each do |tag|
+    li = tag

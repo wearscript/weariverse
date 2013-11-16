@@ -1,7 +1,12 @@
 {
   "name": "SugarGlider",
   "authors": [
-    "kurtisnelson@gmail.com"
+    {
+       "name": "Kurt Nelson",
+       "email": "kurtisnelson@gmail.com",
+       "github": "kurtisnelson",
+       "url": "http://thisisnotajoke.com"
+    }
   ],
 
   "description": "Shows a live Glass-friendly top down view",

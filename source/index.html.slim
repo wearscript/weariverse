@@ -1,7 +1,8 @@
-h1 WearScript Contrib
-ul
-  - data.shared.each do |category, apps|
-    h1 = link_to category, "/categories/#{category}.html"
-    ul
-      - apps.each do |name, app|
-        li = link_to name, "/apps/#{name}.html"
+- row_counter = 0
+- data.shared.each do |id, app|
+  - if row_counter % 3 == 0
+    .row
+  - row_counter += 1
+  .col-md-4
+    = partial :app_card, locals: {app: app}
+    = link_to "More", "/apps/#{id}.html"

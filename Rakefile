@@ -7,9 +7,12 @@ task :default => [:apps, :publish]
 desc "Build apps yml"
 task :apps do
   Dir.chdir('scripts')
-  apps = Dir.glob('*')
+  ids = Dir.glob('*')
   Dir.chdir('..')
-  apps = apps.map{|n| get_app(n)}
+  apps = {}
+  ids.each do |id|
+    apps[id] = get_app(id)
+  end
   FileUtils.mkdir_p 'data'
   File.open('data/shared.yml', 'w') {|f| f.write(apps.to_yaml)}
 end

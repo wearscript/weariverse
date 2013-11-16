@@ -1,0 +1,28 @@
+{
+  "name": "Rotation Vector Demo",
+
+  "authors": [
+    {
+      "name": "Scott Greenwald",
+      "github": "swgreen"
+    }
+  ],
+
+  "description": "Does something awesome",
+
+  "screenshots": [
+  ],
+
+  "require": [
+  ],
+
+  "includes": [
+  ],
+
+  "tags": [
+    "demo"
+  ],
+
+  "video": "",
+  "remixes": ""
+}

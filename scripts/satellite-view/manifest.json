@@ -1,7 +1,12 @@
 {
   "name": "Satellite View",
   "authors": [
-    "kurtisnelson@gmail.com"
+    {
+       "name": "Kurt Nelson",
+       "email": "kurtisnelson@gmail.com",
+       "github": "kurtisnelson",
+       "url": "http://thisisnotajoke.com"
+    }
   ],
 
   "description": "Shows a live satellite view of where you are using Google Maps",

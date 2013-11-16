@@ -33,11 +33,8 @@ require 'slim'
 # page "/this-page-has-no-template.html", :proxy => "/template-file.html" do
 #   @which_fake_page = "Rendering a fake page with a variable"
 # end
-data.shared.each do |category, apps|
-    proxy "/categories/#{category}.html", "/category.html", locals: {apps: apps, category: category}, ignore: true
-    apps.each do |name, app|
-      proxy "/apps/#{name}.html", "/app.html", locals: {app: app, name: name}, ignore: true
-    end
+data.shared.each do |id, app|
+    proxy "/apps/#{id}.html", "/app.html", locals: {app: app}, ignore: true
 end
 
 ###
