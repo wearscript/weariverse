@@ -1,21 +1,26 @@
-// REMOVE ALL COMMENTS OR JSON WILL BE INVALID
 {
-  "name": "ScriptName", //Name shown in launcher, should be pretty version of folder name
-  "authors": [ //G+ identities
-    "you@example.com"
+  "name": "ScriptName",
+  "authors": [
+    {
+      "email": "you@example.com",
+      "url": "http://example.com"
+    }
   ],
 
   "description": "Does something awesome",
-  "screenshots": [ //Filenames of screenshots
+  "screenshots": [
   ],
 
-  "require": [ //Other ws-contrib we should install
+  "require": [
   ],
 
-  "includes": [ //Other files that should be loadable in the webview
+  "includes": [
   ],
 
   "tags": [
     "hello-world"
-  ]
+  ],
+
+  "video": "",
+  "remixes": ""
 }
