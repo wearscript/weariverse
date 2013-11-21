@@ -1,0 +1,25 @@
+{
+  "name": "GDK Gestures Example",
+  "authors": [
+    {
+      "email": "bwhite@dappervision.com",
+      "url": "http://brandynwhite.com"
+    }
+  ],
+
+  "description": "All gestures get logged to the console and the onGesture results are spoken aloud",
+  "screenshots": [
+  ],
+
+  "require": [
+  ],
+
+  "includes": [
+  ],
+
+  "tags": [
+    "custom-web"
+  ],
+
+  "remixes": ""
+}

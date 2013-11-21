@@ -1,0 +1,52 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+
+function onGesture(gesture) {
+    WS.log('onGesture: ' + gesture);
+    if (gesture == 'TWO_TAP') {
+        WS.cardInsert(0, WS.cardFactory('Body', 'Footer'));
+    } else if (gesture == 'THREE_TAP') {
+        WS.cardDelete(0);
+    } else if (gesture == 'LONG_PRESS') {
+    WS.cardModify(0, WS.cardFactory('Body Mod', 'Footer Mod'))
+    }
+}
+    
+function onItemClick(position, id) {
+    WS.log('onItemClick: ' + position + " " + id);
+}
+    
+function onItemSelected(position, id) {
+    WS.log('onItemSelected: ' + position + " " + id);
+}
+    
+function onNothingSelected() {
+    WS.log('onNothingSelected');
+}
+    
+function server() {
+            WS.displayCardScroll();
+
+    //WS.say('cards')
+    var events = 'onItemClick onItemSelected onNothingSelected'.split(" ");
+    for (var i = 0; i < events.length; i++)
+        WS.cardCallback(events[i], events[i]);
+    WS.gestureCallback('onGesture', 'onGesture');
+            WS.cardInsert(0, WS.cardFactory('Body', 'Footer'));
+
+
+
+    WS.liveCardCreate(false, .25);
+}
+    
+function main() {
+    if (WS.scriptVersion(0)) return;
+    ctx = document.getElementById('canvas').getContext("2d");
+    WS.serverConnect('{{WSUrl}}', 'server');
+}
+window.onload = main;
+</script>
+</body>
+</html>
