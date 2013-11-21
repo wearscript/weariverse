@@ -3,11 +3,12 @@
 
 p = app.description
 
-- if app.screenshots
-  .screenshot = image_tag app.screenshots.first
+- if app.screenshots && app.screenshots.length > 0
+  .screenshot = image_tag(app.screenshots.first)
 
 - if app.video
   iframe.video src="//www.youtube.com/embed/#{app.video}" allowfullscreen frameborder="0"
-//.tag-cloud
-  - app.tags.each do |tag|
-    .label.label-default = tag
+//- if app.tags.length > 0
+  .tag-cloud
+    - app.tags.each do |tag|
+      .label.label-default = tag
