@@ -11,5 +11,5 @@
         .panel-body= partial :app_card, locals: {app: app}
         .panel-footer
           ul.nav.nav-pills
-            li = link_to "Wear"
+            li = link_to "Wear", "https://api.picar.us/wearscriptdev/?script=#{app.app_uri}/index.html"
             li = link_to "Source", app.app_uri
