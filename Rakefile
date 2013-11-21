@@ -16,6 +16,7 @@ task :apps do
   end
   FileUtils.mkdir_p 'data'
   File.open('data/shared.yml', 'w') {|f| f.write(apps.to_yaml)}
+  puts "Updated metadata YML"
 end
 
 def get_app name
