@@ -33,10 +33,14 @@ require 'slim'
 # page "/this-page-has-no-template.html", :proxy => "/template-file.html" do
 #   @which_fake_page = "Rendering a fake page with a variable"
 # end
-data.shared.each do |id, app|
-    proxy "/apps/#{id}.html", "/app.html", locals: {app: app}, ignore: true
-end
 
+begin
+  data.shared.each do |id, app|
+      proxy "/apps/#{id}.html", "/app.html", locals: {app: app}, ignore: true
+  end
+rescue
+  raise "`rake apps` must be run before build"
+end
 ###
 # Helpers
 ###
