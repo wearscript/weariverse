@@ -4,11 +4,12 @@
   "authors": [
     {
       "name": "Scott Greenwald",
-      "github": "swgreen"
+      "github": "swgreen",
+      "email": "swgreen@mit.edu"
     }
   ],
 
-  "description": "Does something awesome",
+  "description": "Shows orientation derived from rotation vector",
 
   "tags": [
     "demo"
