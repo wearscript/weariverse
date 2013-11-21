@@ -1,0 +1,36 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+function hn(data) {
+    dataItems = data.items;
+    _.each(data.items, function (x, y) {
+    WS.cardInsert(y, WS.cardFactory(x.title, x.points + " Votes  Posted " + x.postedAgo));
+    })
+}
+function onItemClick(position, id) {
+    WS.log(JSON.stringify([position, id]));
+var item = dataItems[position]
+    WS.blobSend('url', item.url);
+}
+function getData() {
+    $.ajax({url: 'http://api.ihackernews.com/page?format=jsonp&callback=?', dataType: 'jsonp', success: hn})
+    _.delay(getData, 60000);
+}
+function server() {
+    WS.say('hacker news');
+    WS.displayCardScroll();
+    WS.cardCallback('onItemClick', 'onItemClick')
+    getData();
+}
+function main() {
+    dataItems = [];
+    if (WS.scriptVersion(0)) return;
+    WS.serverConnect('{{WSUrl}}', 'server');
+}
+window.onload = main;
+</script></body></html>

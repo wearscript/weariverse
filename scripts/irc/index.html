@@ -1,0 +1,32 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+function speak(msg) {
+    WS.log('IRC Say:' + msg);
+    WS.blobSend('irc', msg + " | Sent through Glass");
+
+}
+function ircb(data) {
+var d = JSON.parse(atob(data));
+    var date = new Date();
+    WS.say(d.msg);
+    WS.cardInsert(0, WS.cardFactory(d.msg, d.source.split('!')[0] + " " + d.channel + " " + date.toLocaleTimeString()));
+}
+function onItemClick(position, id) {
+    WS.log(JSON.stringify([position, id]));
+    WS.speechRecognize('What do you want to say?', 'speak');
+}
+function server() {
+    WS.say('i r c');
+WS.displayCardScroll();
+    WS.cardInsert(0, WS.cardFactory("Tap any card to speak", ""));
+    WS.cardCallback('onItemClick', 'onItemClick')
+    WS.blobCallback('irc', 'ircb')
+}
+function main() {
+    if (WS.scriptVersion(0)) return;
+    WS.serverConnect('{{WSUrl}}', 'server');
+}
+window.onload = main;
+</script></body></html>

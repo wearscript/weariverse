@@ -1,0 +1,26 @@
+{
+  "name": "IRC",
+  "authors": [
+    {
+      "email": "bwhite@dappervision.com",
+      "url": "http://brandynwhite.com"
+    }
+  ],
+
+  "description": "Bidirectional IRC client, needs to be used in conjunction with the accompanying Python relay.",
+  "screenshots": [
+  ],
+
+  "require": [
+  ],
+
+  "includes": [
+  ],
+
+  "tags": [
+    "custom-web"
+  ],
+
+  "video": "",
+  "remixes": ""
+}

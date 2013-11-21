@@ -1,0 +1,26 @@
+{
+  "name": "Hacker News",
+  "authors": [
+    {
+      "email": "bwhite@dappervision.com",
+      "url": "http://brandynwhite.com"
+    }
+  ],
+
+  "description": "Shows you Hacker News front page, clicks open up links on your phone/laptop (open the WearScript Playground).",
+  "screenshots": [
+  ],
+
+  "require": [
+  ],
+
+  "includes": [
+  ],
+
+  "tags": [
+    ""
+  ],
+
+  "video": "",
+  "remixes": ""
+}
