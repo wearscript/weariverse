@@ -10,3 +10,13 @@ So you want to share your scripts with other WearScript users? This is the repos
 4. For added coolness (and to possible qualify for our featured section), make sure you add some screenshots.
 5. Add whatever tags you feel are appropriate, someday we might have a script search that uses them.
 6. Submit a Pull Request. Someone on the WearScript team will review your script, help you get it signed if needed, and will categorize your script.
+
+##Running locally
+
+The site is powered via Middleman and is the standard configuration, with deployment on gh-pages.
+
+1. Install gems needed with `bundle install`
+2. Generate the app metadata `rake apps`
+3. Run the local development server `middleman server`
+4. Verify your changes
+5. Deploy to gh-pages with `rake publish`
