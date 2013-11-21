@@ -10,7 +10,7 @@ function onGesture(gesture) {
     } else if (gesture == 'THREE_TAP') {
         WS.cardDelete(0);
     } else if (gesture == 'LONG_PRESS') {
-    WS.cardModify(0, WS.cardFactory('Body Mod', 'Footer Mod'))
+        WS.cardModify(0, WS.cardFactory('Body Mod', 'Footer Mod'))
     }
 }
     
@@ -27,17 +27,12 @@ function onNothingSelected() {
 }
     
 function server() {
-            WS.displayCardScroll();
-
-    //WS.say('cards')
+    WS.displayCardScroll();
     var events = 'onItemClick onItemSelected onNothingSelected'.split(" ");
     for (var i = 0; i < events.length; i++)
         WS.cardCallback(events[i], events[i]);
     WS.gestureCallback('onGesture', 'onGesture');
-            WS.cardInsert(0, WS.cardFactory('Body', 'Footer'));
-
-
-
+    WS.cardInsert(0, WS.cardFactory('Body', 'Footer'));
     WS.liveCardCreate(false, .25);
 }
     
