@@ -18,9 +18,8 @@ function cb(data) {
 }
  
 function server() {
-    WS.sensorOn(3, .1);
-    WS.sensorOn(-1, 15);
-    WS.sensorCallback("cb");
+    WS.sensorOn(3, .1, "cb");
+    WS.sensorOn(-1, 15, "cb");
     init();
 }
  

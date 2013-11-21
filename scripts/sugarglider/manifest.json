@@ -9,7 +9,7 @@
     }
   ],
 
-  "description": "Shows a live Glass-friendly top down view",
+  "description": "Shows a live Glass-friendly top down view.  Kudos to Jenny Murphy https://github.com/mimming/sugarglider for the idea.",
 
   "tags": [
     "navigation",
