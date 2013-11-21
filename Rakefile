@@ -1,6 +1,7 @@
 require 'middleman-gh-pages'
 require 'fileutils'
 require 'json'
+require 'yaml'
 WS_REPO_NAME="openshades/weariverse"
 task :default => [:apps, :publish]
 
