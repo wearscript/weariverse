@@ -11,6 +11,10 @@ So you want to share your scripts with other WearScript users? This is the repos
 5. Add whatever tags you feel are appropriate, someday we might have a script search that uses them.
 6. Submit a Pull Request. Someone on the WearScript team will review your script, help you get it signed if needed, and will categorize your script.
 
+##Deploying
+
+If you just need to get the latest copy on gh-pages, run `rake`. It will update the app metadata and then compile the site.
+
 ##Running locally
 
 The site is powered via Middleman and is the standard configuration, with deployment on gh-pages.
