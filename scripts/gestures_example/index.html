@@ -4,18 +4,16 @@
 <script>
 function show(msg) {
     WS.log(msg)
-    WS.cardInsert(0, WS.cardFactory(msg, ''));
+    WS.cardModify(0, WS.cardFactory(msg, ''));
 }
 
 function onGesture(gesture) {
     show('onGesture: ' + gesture);
     WS.say(gesture.replace('_', ' '));
-    WS.cardInsert(0, WS.cardFactory(gesture, ''));
 }
 
 function onFingerCountChanged(i, i2) {
     show('onFingerCountChanged: ' + i + ' ' + i2);
-    WS.cardInsert(0, WS.cardFactory('onFingerCountChanged: ' + i + ' ' + i2, ''));
 }
     
 function onScroll(v, v2, v3) {
