@@ -38,29 +38,38 @@
             var q0iText = "No q0iText set.";
             var tmpV3 = new THREE.Vector3();
 
+            // hard-coded from hardware parameters
+
+            var sourceX, sourceY, 
+                destHeight = 360,
+                destWidth = 640,
+                magnification = 2,
+                virtualDestWidth = Math.sqrt(Math.pow(destWidth, 2) + Math.pow(destHeight, 2)),
+                virtualDestHeight = virtualDestWidth,
+                destX = - (virtualDestWidth - destWidth) / 2,
+                destY = - (virtualDestHeight - destHeight) / 2,
+                defaultMagnification = 2,
+                magnification = defaultMagnification;
+
             // Image Rectangle
             var sourceX = 320, // arbitrary initializer
                 sourceY = 180, // arbitrary initializer
-                // sets zoom
-                magnification = 2,
-
-                // hard-coded from hardware parameters
-                destWidth = 640,
-                destHeight = 360,
-
                 // tune this so the image stays stationary w.r.t. environment
-                motionMultiplier = 13.0,
-                // derived drawing parameters
-                virtualDestWidth = Math.sqrt(Math.pow(destWidth, 2) + Math.pow(destHeight, 2)),
-                virtualDestHeight = virtualDestWidth,
+                // TODO: adjust to magnification
+                motionMultiplier = 13.0;
+
+            // derived drawing parameters
+            // TODO adjust sourcex in case it's out of bounds after zoom change
+            function setupViewParams() {
                 sourceWidth = virtualDestWidth / magnification,
                 sourceHeight = virtualDestHeight / magnification,
-                destX = - (virtualDestWidth - destWidth) / 2,
-                destY = - (virtualDestHeight - destHeight) / 2,
+                sourceXMax = Math.max(0, imageWidth - sourceWidth), // when zooming out this gets negative
+                sourceYMax = Math.max(0, imageHeight - sourceHeight), // when zooming out this gets negative
                 initialSourceX = imageWidth/2 - sourceWidth/2,
-                initialSourceY = imageHeight/2 - sourceHeight/2,
-                sourceXMax = imageWidth - sourceWidth,
-                sourceYMax = imageHeight - sourceHeight;
+                initialSourceY = imageHeight/2 - sourceHeight/2;
+            }
+
+            setupViewParams(defaultMagnification);
 
             function cb(data) {
                 if (DBG) console.log("sensor callback called.");
@@ -79,6 +88,20 @@
                 }
             }
 
+            function paramLog() {
+                str = "";
+                str += "sourceX: " + sourceX + "\n";
+                str += "sourceY: " + sourceY + "\n";
+                str += "sourceWidth: " + sourceWidth + "\n";
+                str += "sourceHeight: " + sourceHeight + "\n";
+                str += "destX: " + destX + "\n";
+                str += "destY: " + destY + "\n";
+                str += "virtualDestWidth: " + virtualDestWidth + "\n";
+                str += "virtualDestHeight: " + virtualDestHeight + "\n";
+                str += "motionMultiplier: " + motionMultiplier;
+                WS.log(str);
+            }
+
             function animate(context) {
                 // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
@@ -88,13 +111,40 @@
                 context.translate(canvas.width / 2, canvas.height / 2);
                 context.rotate(RotationVectorUtil.toRadians(-ptpObj.psi));
                 context.translate(-canvas.width / 2, -canvas.height / 2);
-                context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, virtualDestWidth, virtualDestHeight);
+                try {
+                    context.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, virtualDestWidth, virtualDestHeight);
+                } catch(err) {
+                    //paramLog();
+                }                
                 context.restore();
 
                 // request new frame
                 requestAnimFrame(function() {
                     animate(context);
                 });
+            }
+
+            function onGesture(gesture) {
+                WS.log("onGesture: " + gesture);
+                if (gesture === 'SWIPE_LEFT') {
+                    WS.say("Zoom in");
+                    magnification *= 2;
+                    motionMultiplier /= 2;
+                    setupViewParams();
+                } else if (gesture === 'SWIPE_RIGHT') {
+                    WS.say("Zoom out");
+                    magnification /= 2;
+                    motionMultiplier *=2; 
+                    setupViewParams();
+                } else if (gesture === 'TAP') {
+                    WS.say("Recenter");
+                    q0i = null;
+                } else if (gesture == 'TWO_TAP') {
+                    WS.say("Logging view parameters");
+                    paramLog();
+                } else {
+                    WS.say(gesture.replace('_', ' '));
+                }
             }
 
             var canvas = document.getElementById('myCanvas');
@@ -110,6 +160,7 @@
                 WS.displayWebView();
                 if (DBG) console.log("Logging to console!! 23454248");
                 WS.sensorOn(11, sensorInterval, 'cb');
+                WS.gestureCallback('onGesture', 'onGesture');
             });
 
         </script>
