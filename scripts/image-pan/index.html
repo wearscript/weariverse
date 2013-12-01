@@ -97,7 +97,7 @@
                 str += "destX: " + destX + "\n";
                 str += "destY: " + destY + "\n";
                 str += "virtualDestWidth: " + virtualDestWidth + "\n";
-                str += "virtualDestHeight: " + virtualDestHeight;
+                str += "virtualDestHeight: " + virtualDestHeight + "\n";
                 str += "motionMultiplier: " + motionMultiplier;
                 WS.log(str);
             }
@@ -129,10 +129,12 @@
                 if (gesture === 'SWIPE_LEFT') {
                     WS.say("Zoom in");
                     magnification *= 2;
+                    motionMultiplier /= 2;
                     setupViewParams();
                 } else if (gesture === 'SWIPE_RIGHT') {
                     WS.say("Zoom out");
                     magnification /= 2;
+                    motionMultiplier *=2; 
                     setupViewParams();
                 } else if (gesture === 'TAP') {
                     WS.say("Recenter");
@@ -140,12 +142,6 @@
                 } else if (gesture == 'TWO_TAP') {
                     WS.say("Logging view parameters");
                     paramLog();
-                } else if (gesture == 'TWO_SWIPE_LEFT') {
-                    motionMultiplier += 1;
-                    WS.log("motionMultiplier: " + motionMultiplier);
-                } else if (gesture == 'TWO_SWIPE_RIGHT') {
-                    motionMultiplier -= 1;
-                    WS.log("motionMultiplier: " + motionMultiplier);
                 } else {
                     WS.say(gesture.replace('_', ' '));
                 }
