@@ -1,0 +1,18 @@
+{
+  "name": "Keypress",
+
+  "authors": [
+    {
+       "name": "Brandyn White",
+       "email": "bwhite@dappervision.com",
+       "github": "bwhite",
+       "url": "http://brandynwhite.com"
+    }
+  ],
+
+  "description": "Example of keypress events with a bluetooth keyboard, currently requires you to move the mouse and click the screen to bring focus.  Keypresses are logged to the console and spoken aloud.",
+
+  "tags": [
+      "example"
+  ]
+}

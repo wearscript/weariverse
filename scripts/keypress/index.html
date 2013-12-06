@@ -1,0 +1,11 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<body style="width:100%; height:100%; overflow:hidden; margin:0; background: #000;">
+<script>
+document.onkeypress = function (e) {
+    var char = String.fromCharCode(e.which);
+    WS.log('Code: ' + e.which + ' Char: ' + char);
+    WS.say(char);
+}
+</script>
+</body>
+</html>

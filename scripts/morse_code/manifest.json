@@ -1,0 +1,18 @@
+{
+  "name": "Morse Code",
+
+  "authors": [
+    {
+       "name": "Brandyn White",
+       "email": "bwhite@dappervision.com",
+       "github": "bwhite",
+       "url": "http://brandynwhite.com"
+    }
+  ],
+
+  "description": "One finger tap for dot, two finger tap for dash, timing controls letter/word division.",
+
+  "tags": [
+      "demo"
+  ]
+}

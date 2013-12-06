@@ -1,0 +1,96 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+function cb(data) {
+    // Changes canvas color with head rotation
+    if (data['type'] == WS.sensor('orientation')) {
+        ctx.fillStyle = 'hsl(' + data['values'][0] + ', 90%, 50%)'
+        ctx.fillRect(0, 0, 640, 360);
+    }
+}
+function onGesture(name) {
+    WS.log('onGesture: ' + name);
+    if (name == 'TAP' || name == 'LONG_PRESS')
+    MORSE.dot();
+    else if(name == 'TWO_TAP' || name == 'TWO_LONG_PRESS' || name == 'THREE_LONG_PRESS' || name == 'THREE_TAP')
+MORSE.dash();
+}
+function speech(data) {
+    WS.log('speech: ' + data);
+    WS.say('you said ' + data);
+}
+
+function Morse() {
+this.word = '';
+    this.state = '';
+    this.lastTime = 0;
+    this.maxTime = 1.5;
+    this.wordTime = 3.5;
+    this.morse = _.object(_.map('.- -... -.-. -.. . ..-. --. .... .. .--- -.- .-.. -- -. --- .--. --.- .-. ... - ..- ...- .-- -..- -.-- --..'.split(' '), function (x, y) {return [x, y]}));    
+    WS.log(JSON.stringify(this.morse))
+    this.print = function () {
+        WS.log(JSON.stringify(this.state));
+    }
+    this.checkState = function () {
+        if (this.time() - this.lastTime > this.maxTime) {
+            this.stateToChar();
+            this.state = '';
+            this.updateCard();
+        }
+        if (this.time() - this.lastTime > this.wordTime && this.word.length) {
+WS.say(this.word);
+            this.word = '';
+            this.updateCard();
+        }
+    }
+    this.updateCard = function () {
+        WS.cardModify(0, WS.cardFactory(this.state, this.word));
+    }
+    this.stateToChar = function () {
+        var char = this.morse[this.state];
+        if (!_.isUndefined(char)) {
+            char = String.fromCharCode(char + 97);
+            this.word += char;
+            WS.log('Got char: ' + char);
+        }
+    }
+    this.dot = function () {
+        this.command('.');
+    }
+    this.time = function () {
+        return new Date().getTime() / 1000;
+    }
+    this.command = function (x) {
+        this.checkState();
+        this.state += x;
+        this.updateCard();
+        this.lastTime = this.time();
+        this.print();
+        _.delay(_.bind(this.checkState, this), this.maxTime * 1000);
+        _.delay(_.bind(this.checkState, this), this.wordTime * 1000);
+    }
+    this.dash = function () {
+        this.command('-');
+    }
+}
+
+function server() {
+    MORSE = new Morse();
+    WS.gestureCallback('onGesture', 'onGesture');
+
+}
+function main() {
+    if (WS.scriptVersion(0)) return;
+        WS.displayCardScroll();
+    WS.cardInsert(0, WS.cardFactory('', ''));
+    WS.serverConnect('{{WSUrl}}', 'server');
+}
+window.onload = main;
+</script>
+</body>
+</html>

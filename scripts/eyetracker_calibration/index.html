@@ -1,0 +1,114 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+function Pupil(rows, columns, delay, height, width, canvas) {
+    this.rows = rows;
+    this.columns = columns;
+    this.delay = delay;
+    this.canvas = canvas;
+    this.height = height;
+    this.width = width;
+    this.rounds = 3;
+    this.xStep = 0;
+    if (columns > 1)
+    this.xStep = this.width / (columns - 1);
+    this.yStep = 0;
+    if (rows > 1)
+this.yStep = this.height / (rows - 1);
+    this.calibrated = false;
+    this.safe = false;
+    this.pointNum = 0;
+    this.sampleNum = 0;
+    this.minSamples = 10;
+    this.calibrate = function () {
+        this.calibrated = false;
+        this.safe = false;
+        this.pointNum = 0;
+        this.sampleNum = 0;
+        this.calibrateStep();
+    }
+
+    this.pointToXY = function (num) {
+        var column =  num % this.columns;
+        var row = Math.floor(num / this.columns);
+        return [column * this.xStep, row * this.yStep];
+    }
+
+    this.circle = function (num, color) {
+        // Negatives indicate values to ignore
+        WS.log('Circle:' + num);
+        var ctx = this.canvas.getContext("2d");
+        ctx.clearRect(0, 0, this.width, this.height);
+        if (num < 0)
+            return;
+        var xy = this.pointToXY(num);
+        ctx.beginPath();
+        ctx.arc(xy[0], xy[1], 10, 0, 2 * Math.PI, false);
+        ctx.fillStyle=color;
+        ctx.fill();
+    }
+
+    this.calibrateStep = function () {
+        // Draw a dot then wait, after the delay allow a sample to be taken
+        this.safe = false;
+        this.sampleNum = 0;
+        if (this.pointNum < this.rows * this.columns) {
+            this.circle(this.pointNum, "#FF0000");
+            _.delay(_.bind(function () {this.safe = true}, this), this.delay);
+        } else {
+            if (this.rounds > 0) {
+                this.rounds -= 1;
+                this.calibrate();
+            } else {
+		              this.calibrated = true;
+		          WS.data(-1023, 'Pupil Point', JSON.stringify([-1]));
+		      ctx.clearRect(0, 0, this.width, this.height);
+            }
+        }
+    }
+
+    this.sensorCallback = function (data) {
+        if (data.type != WS.sensor('pupil'))
+            return;
+
+        if (this.safe) {
+            this.circle(this.pointNum, "#00FF00")
+            this.sampleNum += 1;
+            var xy = this.pointToXY(this.pointNum);
+		          WS.data(-1023, 'Pupil Point', JSON.stringify([this.pointNum, xy[1], xy[0], data.values[0], data.values[1]]));
+            if (this.sampleNum > this.minSamples) {
+                this.pointNum += 1;
+                this.calibrateStep();
+            }
+        }
+    }
+}
+
+function cb(data) {
+    WS.log(JSON.stringify(data));
+    pupil.sensorCallback(data);
+}
+function server() {
+    WS.log('Eyetracking');
+    WS.say('Eyetracking');
+    pupil = new Pupil(1, 2, 5000, 360, 640, document.getElementById('canvas'));
+    var sensors = ['pupil'];
+    for (var i = 0; i < sensors.length; i++)
+        WS.sensorOn(WS.sensor(sensors[i]), .15, 'cb');
+    WS.dataLog(false, true, .15);
+    pupil.calibrate()
+}
+function main() {
+    if (WS.scriptVersion(0)) return;
+    ctx = document.getElementById('canvas').getContext("2d");
+    WS.serverConnect('{{WSUrl}}', 'server');
+}
+window.onload = main;
+</script>
+</body>
+</html>

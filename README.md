@@ -19,7 +19,8 @@ If you just need to get the latest copy on gh-pages, run `rake`. It will update 
 
 The site is powered via Middleman and is the standard configuration, with deployment on gh-pages.
 
-1. Install gems needed with `bundle install`
+0. Dependencies (Ubuntu 13.04): sudo apt-get install rake bundler ruby1.9.1-dev nodejs
+1. Install gems needed with `bundle install` (may require sudo depending on gem path permissions)
 2. Generate the app metadata `rake apps`
 3. Run the local development server `middleman server`
 4. Verify your changes
