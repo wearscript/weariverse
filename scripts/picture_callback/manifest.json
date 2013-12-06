@@ -1,5 +1,5 @@
 {
-  "name": "Morse Code",
+  "name": "Picture Callback",
 
   "authors": [
     {
@@ -10,8 +10,9 @@
     }
   ],
 
-  "description": "",
+  "description": "Shows taking a picture with the camera and displaying it in an image tag",
 
   "tags": [
+      "example"
   ]
 }
