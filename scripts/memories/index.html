@@ -1,0 +1,56 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<script src="https://raw.github.com/Glench/fuzzyset.js/master/lib/fuzzyset.js"></script>
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+var memories = {};
+memories['favorite pizza'] = 'Hawiian';
+memories['my age'] = '23';
+var new_memory_name;
+var new_memory_content;
+    
+function getNameOfStoredMemory(data) {
+    memory_keys = FuzzySet(Object.keys(memories));
+    WS.log('memory keys '+memory_keys.get(data));
+    matched_key = memory_keys.get(data)[0][1];
+    WS.say(memories[matched_key]);
+    WS.cardInsert(0, WS.cardFactory(memories[matched_key], matched_key));
+}
+function getNameOfNewMemory(data) {
+    new_memory_name = data;
+    WS.speechRecognize('Say the content of the new memory', 'getContentOfNewMemory');
+}
+function getContentOfNewMemory(data) {
+    new_memory_content = data;
+    memories[new_memory_name] = new_memory_content;
+}
+function onGesture(name) {
+    if (name == 'TWO_TAP') {
+        // retrive memory    
+        WS.speechRecognize('Say the name of the stored memory', 'getNameOfStoredMemory');
+    } else if (name == 'THREE_TAP') {
+        // create memory
+        WS.speechRecognize('Say the name of the new memory', 'getNameOfNewMemory');
+    }
+}
+function server() {
+    WS.displayCardScroll();
+    var gestures = ['onGesture'];
+    for (var i = 0; i < gestures.length; i++)
+        WS.gestureCallback(gestures[i], gestures[i]);
+    WS.liveCardCreate(false, .2);
+    WS.cardInsert(0, WS.cardFactory('To retrive: tap with two fingers\nTo create: tap with three fingers', ''));
+}
+function main() {
+    WS.log('memories has started');
+    if (WS.scriptVersion(0)) return;
+    ctx = document.getElementById('canvas').getContext("2d");
+    WS.serverConnect('{{WSUrl}}', 'server');
+}
+window.onload = main;
+</script>
+</body>
+</html>
+

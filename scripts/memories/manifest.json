@@ -1,0 +1,26 @@
+{
+  "name": "Memories",
+  "authors": [
+    {
+      "email": "timothy.clemans@gmail.com",
+      "url": ""
+    }
+  ],
+
+  "description": "Using speech recognition you can temporarily store and retrieve strings of text.",
+  "screenshots": [
+  ],
+
+  "require": [
+  ],
+
+  "includes": [
+  ],
+
+  "tags": [
+    "demo"
+  ],
+
+  "video": "",
+  "remixes": ""
+}
