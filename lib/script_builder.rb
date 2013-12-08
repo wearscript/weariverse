@@ -2,6 +2,7 @@ require 'json'
 require 'fileutils'
 require 'shell'
 require 'git'
+require 'hub'
 class ScriptBuilder
   FEATURES = ['server', 'hardware', 'multiglass', 'widget', 'extra-apk', 'eyetracker', 'custom-web']
   def self.FEATURES
@@ -72,14 +73,16 @@ class ScriptBuilder
   end
 
   def git_new
+    @git.pull
     @git.add(@path)
-    @git.remote('origin').fetch
-    @git.rebase('origin/master')
+    @git.commit "Skeleton for #{@name}"
   end
 
   def submit
-    @git.add(@path)
     @git.remote('origin').fetch
-    @git.rebase('origin/master')
+    system "git rebase origin/master"
+    @git.add(@path)
+    @git.commit "Submitting #{@name}"
+    @git.push
   end
 end
