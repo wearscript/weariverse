@@ -13,4 +13,8 @@ So you want to share your scripts with other WearScript users? This is the repos
 
 ##Compiling
 
-Running `rake` will generate `scripts.yml` which can then be copied over to the site builder and used to update it.
+Running `rake apps` will generate `scripts.yml` which can then be copied over to the site builder and used to update it.
+
+##Syncing to S3
+
+Running `rake` will rebuild the YAML and sync all `index.html` files to the S3 bucket.
