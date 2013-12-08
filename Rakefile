@@ -2,6 +2,7 @@ require 'fog'
 require 'fileutils'
 require 'json'
 require 'yaml'
+require_relative 'lib/script_builder'
 WS_REPO_NAME="OpenShades/weariverse"
 S3_BUCKET="weariverse-scripts"
 task :default => [:apps, :sync]
@@ -25,7 +26,7 @@ def get_app name
   data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/tree/master/scripts/#{name}"
   data['features'] = []
   data['tags'].each do |t|
-    if ['server', 'hardware', 'multiglass', 'widget', 'extra-apk', 'eyetracker', 'custom-web'].include? t
+    if ScriptBuilder.FEATURES.include? t
       data['features'] << t
     end
   end
@@ -37,6 +38,7 @@ def get_json path
   return JSON.parse(contents)
 end
 
+desc "Sync assets to S3"
 task :sync do
   storage = Fog::Storage.new(provider: 'AWS', aws_access_key_id: ENV['AWS_ID'], aws_secret_access_key: ENV['AWS_SECRET'])
   directory = storage.directories.get(S3_BUCKET)
@@ -70,4 +72,15 @@ task :sync do
       puts "Skipping #{id}"
     end
   end
+end
+
+desc "Make a new script"
+task :new do
+  ScriptBuilder.do
+end
+
+task :submit do
+  puts "What is the script name?"
+  name = $stdin.gets.chomp
+  ScriptBuilder.new(name).submit
 end
