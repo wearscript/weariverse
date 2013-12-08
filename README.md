@@ -11,17 +11,6 @@ So you want to share your scripts with other WearScript users? This is the repos
 5. Add whatever tags you feel are appropriate, someday we might have a script search that uses them.
 6. Submit a Pull Request. Someone on the WearScript team will review your script, help you get it signed if needed, and will categorize your script.
 
-##Deploying
+##Compiling
 
-If you just need to get the latest copy on gh-pages, run `rake`. It will update the app metadata and then compile the site.
-
-##Running locally
-
-The site is powered via Middleman and is the standard configuration, with deployment on gh-pages.
-
-0. Dependencies (Ubuntu 13.04): sudo apt-get install rake bundler ruby1.9.1-dev nodejs
-1. Install gems needed with `bundle install` (may require sudo depending on gem path permissions)
-2. Generate the app metadata `rake apps`
-3. Run the local development server `middleman server`
-4. Verify your changes
-5. Deploy to gh-pages with `rake publish`
+Running `rake` will generate `scripts.yml` which can then be copied over to the site builder and used to update it.

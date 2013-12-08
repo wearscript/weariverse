@@ -1,9 +1,8 @@
-require 'middleman-gh-pages'
 require 'fileutils'
 require 'json'
 require 'yaml'
 WS_REPO_NAME="openshades/weariverse"
-task :default => [:apps, :publish]
+task :default => [:apps]
 
 desc "Build apps yml"
 task :apps do
@@ -14,14 +13,14 @@ task :apps do
   ids.each do |id|
     apps[id] = get_app(id)
   end
-  FileUtils.mkdir_p 'data'
-  File.open('data/shared.yml', 'w') {|f| f.write(apps.to_yaml)}
+  File.open('scripts.yml', 'w') {|f| f.write(apps.to_yaml)}
   puts "Updated metadata YML"
 end
 
 def get_app name
   data = get_json "scripts/#{name}/manifest.json"
   data['app_uri'] = "https://raw.github.com/#{WS_REPO_NAME}/master/scripts/#{name}"
+  data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/master/scripts/#{name}"
   data['features'] = []
   data['tags'].each do |t|
     if ['server', 'hardware', 'multiglass', 'widget', 'extra-apk', 'eyetracker', 'custom-web'].include? t
