@@ -1,5 +1,5 @@
 {
-  "name": "Memories",
+  "name": "Camera Preview",
   "authors": [
     {
       "name": "Tim Clemans",
@@ -8,7 +8,7 @@
     }
   ],
 
-  "description": "Using speech recognition you can temporarily store and retrieve strings of text.",
+  "description": "Shows preview of what image will be before taking a picture.",
   "screenshots": [
   ],
 

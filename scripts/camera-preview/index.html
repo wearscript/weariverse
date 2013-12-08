@@ -1,0 +1,35 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+    <canvas id="image" width="640" height="360" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+<script>
+function showImage(imageDataArray) {
+    image = "data:image/jpeg;base64,"+imageDataArray ;
+    var img = new Image();
+    img.onload = function () {
+        ctximg.drawImage(img, 0, 0, 640, 360);
+    }
+    img.src = image;      
+}
+function onGesture(name) {
+    if (name == 'TAP') {
+        WS.cameraPhoto();
+    }
+}
+function server() {
+    WS.cameraOn(.15);
+    WS.cameraCallback(0, 'showImage');
+    var gestures = ['onGesture'];
+    for (var i = 0; i < gestures.length; i++)
+        WS.gestureCallback(gestures[i], gestures[i]);
+}
+function main() {
+    if (WS.scriptVersion(0)) return;
+    ctximg = document.getElementById('image').getContext("2d");
+    WS.serverConnect('{{WSUrl}}', 'server');
+}
+window.onload = main;
+</script>
+</body>
+</html>
