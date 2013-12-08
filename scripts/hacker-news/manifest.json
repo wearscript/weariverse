@@ -1,13 +1,14 @@
 {
-  "name": "GDK Gestures Example",
+  "name": "Hacker News",
   "authors": [
     {
+      "name": "Brandyn White",
       "email": "bwhite@dappervision.com",
       "url": "http://brandynwhite.com"
     }
   ],
 
-  "description": "All gestures get logged to the console and the onGesture results are spoken aloud",
+  "description": "Shows you Hacker News front page, clicks open up links on your phone/laptop (open the WearScript Playground).",
   "screenshots": [
   ],
 
@@ -18,8 +19,9 @@
   ],
 
   "tags": [
-    "custom-web"
+    ""
   ],
 
+  "video": "HQFgfXFrR1E",
   "remixes": ""
 }

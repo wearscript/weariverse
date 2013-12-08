@@ -1,13 +1,14 @@
 {
-  "name": "GDK Cards Example",
+  "name": "GDK Gestures Example",
   "authors": [
     {
+      "name": "Brandyn White",
       "email": "bwhite@dappervision.com",
       "url": "http://brandynwhite.com"
     }
   ],
 
-  "description": "Two finger tap to create a card, Three finger tap to delete the first card, and Long press to replace a card.",
+  "description": "All gestures get logged to the console and the onGesture results are spoken aloud",
   "screenshots": [
   ],
 

@@ -1,13 +1,14 @@
 {
-  "name": "Hacker News",
+  "name": "GDK Cards Example",
   "authors": [
     {
+      "name": "Brandyn White",
       "email": "bwhite@dappervision.com",
       "url": "http://brandynwhite.com"
     }
   ],
 
-  "description": "Shows you Hacker News front page, clicks open up links on your phone/laptop (open the WearScript Playground).",
+  "description": "Two finger tap to create a card, Three finger tap to delete the first card, and Long press to replace a card.",
   "screenshots": [
   ],
 
@@ -18,9 +19,8 @@
   ],
 
   "tags": [
-    ""
+    "custom-web"
   ],
 
-  "video": "HQFgfXFrR1E",
   "remixes": ""
 }
