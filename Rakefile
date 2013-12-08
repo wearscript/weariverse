@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'json'
 require 'yaml'
-WS_REPO_NAME="openshades/weariverse"
+WS_REPO_NAME="OpenShades/weariverse"
 task :default => [:apps]
 
 desc "Build apps yml"
@@ -20,7 +20,7 @@ end
 def get_app name
   data = get_json "scripts/#{name}/manifest.json"
   data['app_uri'] = "https://raw.github.com/#{WS_REPO_NAME}/master/scripts/#{name}"
-  data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/master/scripts/#{name}"
+  data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/tree/master/scripts/#{name}"
   data['features'] = []
   data['tags'].each do |t|
     if ['server', 'hardware', 'multiglass', 'widget', 'extra-apk', 'eyetracker', 'custom-web'].include? t
