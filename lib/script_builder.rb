@@ -21,7 +21,7 @@ class ScriptBuilder
     @name = name
     @manifest[:authors] = []
     @manifest[:tags] = []
-    @git = Git.open(Dir.pwd, log: Logger.new(STDOUT))
+    @git = Git.open(Dir.pwd)
   end
 
   def do
