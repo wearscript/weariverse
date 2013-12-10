@@ -2,7 +2,6 @@ require 'json'
 require 'fileutils'
 require 'shell'
 require 'git'
-require 'hub'
 class ScriptBuilder
   FEATURES = ['server', 'hardware', 'multiglass', 'widget', 'extra-apk', 'eyetracker', 'custom-web']
   def self.FEATURES
