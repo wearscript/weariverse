@@ -53,23 +53,22 @@ task :sync do
   Dir.chdir('scripts')
   ids = Dir.glob('*')
   Dir.chdir('..')
+  file_names = ["index.html", "widget.html"]
   ids.each do |id|
-    path = "scripts/#{id}/index.html"
-    key = "#{id}/index.html"
-    needs_update = true
-    if file = directory.files.head(key)
-      needs_update = !(file.content_length == File.size(path))
-    end
+    file_names.each do |file_name|
+      path = "scripts/#{id}/#{file_name}"
+      key = "#{id}/#{file_name}"
 
-    if needs_update
-      puts "Uploading #{id}..."
+      unless File.file?(path)
+	next
+      end
+
+      puts "Uploading #{key}..."
       file = directory.files.new(key: key)
       file.storage_class = 'REDUCED_REDUNDANCY'
       file.public = true
       file.body = File.open(path)
       file.save
-    else
-      puts "Skipping #{id}"
     end
   end
 end
