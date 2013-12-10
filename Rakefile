@@ -65,9 +65,7 @@ task :sync do
       path = "scripts/#{id}/#{file_name}"
       key = "#{id}/#{file_name}"
 
-      unless File.file?(path)
-	next
-      end
+      next unless File.file?(path)
 
       puts "Uploading #{key}..."
       file = directory.files.new(key: key)
@@ -76,6 +74,40 @@ task :sync do
       file.body = File.open(path)
       file.save
     end
+  end
+end
+
+desc "Sync APKs"
+task :apks do
+  storage = Fog::Storage.new(provider: 'AWS', aws_access_key_id: ENV['AWS_ID'], aws_secret_access_key: ENV['AWS_SECRET'])
+  directory = storage.directories.get(S3_BUCKET)
+
+  unless directory
+    directory = storage.directories.create(
+        key: S3_BUCKET, # globally unique name
+        public: true
+    )
+  end
+
+  Dir.chdir('scripts')
+  ids = Dir.glob('*')
+  ids.each do |id|
+    puts "Finding APKs for #{id}"
+    Dir.chdir(id)
+    file_names = Dir.glob("*.apk")
+    file_names.each do |file_name|
+      key = "#{id}/#{file_name}"
+
+      next unless File.file?(file_name)
+
+      puts "Uploading #{key}..."
+      file = directory.files.new(key: key)
+      file.storage_class = 'REDUCED_REDUNDANCY'
+      file.public = true
+      file.body = File.open(file_name)
+      file.save
+    end
+    Dir.chdir('..')
   end
 end
 
