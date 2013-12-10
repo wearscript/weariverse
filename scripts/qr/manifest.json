@@ -1,5 +1,5 @@
 {
-  "name": "qr",
+  "name": "QR",
   "authors": [
     {
       "name": "Brandyn White",
@@ -13,5 +13,5 @@
     "qr",
     "example"
   ],
-  "description": "Scan with a QR code and have links open in tabs on your phone/laptop\u001b[D\u001b[D\u001b[D\u001b"
+  "description": "Scan a QR code with Glass and have links open in tabs on your phone/laptop"
 }

@@ -4,7 +4,7 @@ require 'json'
 require 'yaml'
 require_relative 'lib/script_builder'
 WS_REPO_NAME="OpenShades/weariverse"
-S3_BUCKET="weariverse-scripts"
+S3_BUCKET="weariverse"
 task :default => [:apps, :sync]
 
 desc "Build apps yml"
