@@ -22,6 +22,7 @@ end
 
 def get_app name
   data = get_json "scripts/#{name}/manifest.json"
+  data['sha2'] = Digest::SHA2.hexdigest(File.read("scripts/#{name}/index.html"));
   data['app_uri'] = "https://s3.amazonaws.com/#{S3_BUCKET}/#{name}"
   data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/tree/master/scripts/#{name}"
   data['features'] = []
