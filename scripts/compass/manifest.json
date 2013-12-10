@@ -11,10 +11,11 @@
   ],
 
   "description": "Shows a live compass",
-
+  "voice_trigger": "compass",
   "tags": [
     "navigation",
     "mapping",
-    "compass"
+    "compass",
+    "apk"
   ]
 }

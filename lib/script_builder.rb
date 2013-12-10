@@ -41,6 +41,12 @@ class ScriptBuilder
     while (tag = $stdin.gets.chomp).length > 0
       @manifest[:tags] << tag
     end
+    puts "What would you like your VOICE_TRIGGER to be? (Optional)"
+    @manifest[:voice_trigger] = $stdin.gets.chomp
+    if @manifest[:voice_trigger].length > 0
+      puts "Would you like us to build you an APK version? [y/N]"
+      @manifest[:tags] << "apk" if $stdin.gets.chomp == 'y'
+    end
     write
     git_new
   end
