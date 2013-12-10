@@ -85,9 +85,9 @@ class ScriptBuilder
 
   def submit
     @git.remote('origin').fetch
-    system "git rebase origin/master"
     @git.add(@path)
     @git.commit "Submitting #{@name}"
+    system "git rebase origin/master"
     @git.push
   end
 end
