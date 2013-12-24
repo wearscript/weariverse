@@ -3,12 +3,11 @@
   "authors": [
     {
       "name": "Tim Clemans",
-      "email": "timothy.clemans@gmail.com",
       "github": "timothyclemans"
     }
   ],
 
-  "description": "Shows preview of what image will be before taking a picture.",
+  "description": "Shows image preview before taking a picture.",
   "screenshots": [
   ],
 

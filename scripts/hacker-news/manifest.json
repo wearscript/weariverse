@@ -3,12 +3,11 @@
   "authors": [
     {
       "name": "Brandyn White",
-      "email": "bwhite@dappervision.com",
       "url": "http://brandynwhite.com"
     }
   ],
 
-  "description": "Shows you Hacker News front page, clicks open up links on your phone/laptop (open the WearScript Playground).",
+  "description": "Cards for each front page link, links open in phone/laptop.",
   "screenshots": [
   ],
 
@@ -19,7 +18,7 @@
   ],
 
   "tags": [
-    ""
+    "custom-web"
   ],
 
   "video": "HQFgfXFrR1E",

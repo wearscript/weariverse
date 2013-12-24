@@ -3,12 +3,12 @@
   "authors": [
     {
       "name": "Brandyn White",
-      "email": "bwhite@dappervision.com",
+      "github": "bwhite",
       "url": "http://brandynwhite.com"
     }
   ],
 
-  "description": "Two finger tap to create a card, Three finger tap to delete the first card, and Long press to replace a card.",
+  "description": "Example of adding/deleting GDK cards.",
   "screenshots": [
   ],
 
@@ -19,7 +19,7 @@
   ],
 
   "tags": [
-    "custom-web"
+    ""
   ],
 
   "remixes": ""
