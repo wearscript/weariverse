@@ -10,9 +10,10 @@
     }
   ],
 
-  "description": "Example of keypress events with a bluetooth keyboard. Keypresses are logged to the console and spoken aloud.",
+  "description": "Handle keypress events from a bluetooth keyboard. Keypresses are spoken aloud.",
 
   "tags": [
-      "example"
+      "example",
+      "hardware"
   ]
 }
