@@ -6,7 +6,7 @@
 scripts.yml
 # Ignore bundler config
 /.bundle
-
+compiler
 # Ignore the build directory
 /build
 
