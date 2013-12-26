@@ -3,7 +3,7 @@ require 'fileutils'
 require 'json'
 require 'yaml'
 require 'pry'
-require_relative 'lib/script_builder'
+require_relative 'lib/builder'
 WS_REPO_NAME="OpenShades/weariverse"
 S3_BUCKET="weariverse"
 task :default => [:yml, :sync, :apks]
@@ -31,7 +31,7 @@ def get_app name
   data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/tree/master/scripts/#{name}"
   data['features'] = []
   data['tags'].each do |t|
-    if ScriptBuilder.FEATURES.include? t
+    if Builder::Script.FEATURES.include? t
       data['features'] << t
     end
   end
@@ -136,11 +136,11 @@ end
 desc "Make a new script"
 task :new, :name do |t, args|
   name = args[:name]
-  ScriptBuilder.new(name).do
+  Builder::Script.new(name).do
 end
 
 desc "Submit PR"
 task :submit, :script do |t, args|
   name = args[:script]
-  ScriptBuilder.new(name).submit
+  Builder::Script.new(name).submit
 end
