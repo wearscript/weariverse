@@ -10,7 +10,7 @@ class Compiler
     else
       new_script = File.read(path)
     end
-    new_script.gsub! "\n", ""
+    new_script.gsub! "\n", "\\n"
     new_script.gsub! "\"", "\\\""
 
     $package = nice_name.gsub(/[-\s]/,"_").downcase
