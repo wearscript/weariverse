@@ -2,6 +2,7 @@ require 'fog'
 require 'fileutils'
 require 'json'
 require 'yaml'
+require 'pry'
 require_relative 'lib/script_builder'
 WS_REPO_NAME="OpenShades/weariverse"
 S3_BUCKET="weariverse"
@@ -20,6 +21,10 @@ task :yml do
   puts "Updated metadata YML"
 end
 
+def get_author github
+  get_json "authors/#{github}.json"
+end
+
 def get_app name
   data = get_json "scripts/#{name}/manifest.json"
   data['app_uri'] = "https://s3.amazonaws.com/#{S3_BUCKET}/#{name}"
@@ -31,6 +36,12 @@ def get_app name
     end
   end
 
+  data['authors'] = data['authors'].map do |a|
+    if File.file? "authors/#{a}.json"
+       a = get_author a
+    end
+    a
+  end
   data['sha2'] = Digest::SHA2.hexdigest(File.read("scripts/#{name}/index.html"));
   if File.file? "scripts/#{name}/#{data['name']}.apk"
     data['tags'] << 'apk'

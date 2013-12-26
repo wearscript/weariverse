@@ -1,12 +1,7 @@
 {
   "name": "IRC",
   "authors": [
-    {
-      "name": "Brandyn White",
-      "github": "bwhite",
-      "email": "bwhite@dappervision.com",
-      "url": "http://brandynwhite.com"
-    }
+    "bwhite"
   ],
 
   "description": "Bidirectional IRC client, needs to be used in conjunction with the accompanying Python relay.",

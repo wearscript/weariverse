@@ -2,12 +2,7 @@
   "name": "Compass",
 
   "authors": [
-    {
-       "name": "Kurt Nelson",
-       "email": "kurtisnelson@gmail.com",
-       "github": "kurtisnelson",
-       "url": "http://thisisnotajoke.com"
-    }
+      "kurtisnelson"
   ],
 
   "description": "Shows a live compass",
