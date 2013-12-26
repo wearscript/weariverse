@@ -11,11 +11,12 @@ We also recomend you install hub, on OS X with brew, do `brew install hub`. On L
 0. Clone this repo with `hub clone OpenShades/weariverse`
 1. Inside the repo, fork with `hub fork`
 2. Run `bundle install`
-3. Run `rake new` and answer all of the questions
+3. Run `rake new[script-name-here]` and answer all of the questions
 4. Edit manifest.json to taste. This is what we use to render your script listing. Includes are for additional javascript or image files that you want to be able to load from the WebView. Require tells the WS server that other scripts should also be installed on the user's Glass for everything to work happily.
 5. For added coolness (and to possible qualify for our featured section), make sure you add some screenshots. You can take a screenshot with the command `adb shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > screen.png`
-6. Once you are done writing your script and are ready to submit it, run `rake submit`. This will make sure your local copy is fully rebased and commit your changes. 
-7. Submit a pull request, either via the GitHub website or of the format `hub pull-request -m "Script: YOUR_SCRIPT_NAME" -b origin:master -h YOUR_USERNAME:master`
+6. If you would like your script distributed also as an APK, run `rake compile[script-name-here]` to compile the APK. This requires a full android environment on your machine.
+7. Once you are done writing your script and are ready to submit it, run `rake submit[script-name-here]`. This will make sure your local copy is fully rebased and commit your changes.
+8. Submit a pull request, either via the GitHub website or of the format `hub pull-request -m "Script: YOUR_SCRIPT_NAME" -b origin:master -h YOUR_USERNAME:master`
 
 ###The Manual Way
 1. Copy another script in the script directory and edit the manifest.json to taste.

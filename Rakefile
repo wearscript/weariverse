@@ -5,10 +5,10 @@ require 'yaml'
 require_relative 'lib/script_builder'
 WS_REPO_NAME="OpenShades/weariverse"
 S3_BUCKET="weariverse"
-task :default => [:apps, :sync]
+task :default => [:yml, :sync, :apks]
 
 desc "Build apps yml"
-task :apps do
+task :yml do
   Dir.chdir('scripts')
   ids = Dir.glob('*')
   Dir.chdir('..')
@@ -123,12 +123,13 @@ task :compile, :script do |t, args|
 end
 
 desc "Make a new script"
-task :new do
-  ScriptBuilder.do
+task :new, :name do |t, args|
+  name = args[:name]
+  ScriptBuilder.new(name).do
 end
 
-task :submit do
-  puts "What is the script name?"
-  name = $stdin.gets.chomp
+desc "Submit PR"
+task :submit, :script do |t, args|
+  name = args[:script]
   ScriptBuilder.new(name).submit
 end
