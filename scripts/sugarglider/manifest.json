@@ -1,12 +1,7 @@
 {
   "name": "SugarGlider",
   "authors": [
-    {
-       "name": "Kurt Nelson",
-       "email": "kurtisnelson@gmail.com",
-       "github": "kurtisnelson",
-       "url": "http://thisisnotajoke.com"
-    }
+    "kurtisnelson"
   ],
 
   "description": "Shows a live Glass-friendly top down view.  Kudos to Jenny Murphy for the idea.",
