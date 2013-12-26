@@ -1,0 +1,17 @@
+{
+  "name": "swipe-by-nodding",
+  "authors": [
+    {
+      "name": "Tim Clemans",
+      "email": "timothy.clemans@gmail.com",
+      "github": "timothyclemans",
+      "url": ""
+    }
+  ],
+  "tags": [
+    "demo",
+    "apk"
+  ],
+  "description": "Allows you to switch between cards by nodding your head up (SWIPE_RIGHT) and head down (SWIPE_LEFT).",
+  "voice_trigger": "Head Nodding Card Changer Demo"
+}
