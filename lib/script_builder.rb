@@ -54,15 +54,21 @@ class ScriptBuilder
   def author
     puts "Author Information:"
     a = {}
+    puts "Github:"
+    a[:github] = $stdin.gets.chomp
+    if File.file? "authors/#{a[:github]}.json"
+      puts "Reusing author data"
+      @manifest[:authors] << a[:github]
+      return
+    end
     puts "Name:"
     a[:name] = $stdin.gets.chomp
     puts "Email:"
     a[:email] = $stdin.gets.chomp
-    puts "Github:"
-    a[:github] = $stdin.gets.chomp
     puts "URL:"
     a[:url] = $stdin.gets.chomp
-    @manifest[:authors] << a
+    File.write("authors/#{a[:github]}.json", JSON.pretty_generate(a))
+    @manifest[:authors] << a[:github]
   end
 
   def write
