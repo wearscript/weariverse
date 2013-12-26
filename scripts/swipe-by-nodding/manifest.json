@@ -9,8 +9,7 @@
     }
   ],
   "tags": [
-    "demo",
-    "apk"
+    "demo"
   ],
   "description": "Allows you to switch between cards by nodding your head up (SWIPE_RIGHT) and head down (SWIPE_LEFT).",
   "voice_trigger": "Head Nodding Card Changer Demo"

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.weariverse.<%= $package %>"
+    package="com.weariverse.<%= $package %>"
     android:versionCode="1"
     android:versionName="1.0" >
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -21,13 +21,19 @@
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
+    <supports-screens android:resizeable="true"
+                      android:smallScreens="true"
+                      android:normalScreens="true"
+                      android:largeScreens="true"
+                      android:anyDensity="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
           <activity android:name=".activities.MainActivity"
-            android:label="<%= $name %>"
+                  android:label="<%= $name %>"
                   android:screenOrientation="landscape"
                   android:theme="@style/AppTheme"
               android:configChanges="keyboardHidden|orientation">
@@ -40,7 +46,31 @@
                   android:name="com.google.android.glass.VoiceTrigger"
                   android:resource="@xml/voice_trigger_start" />
         </activity>
-
+        <activity android:name=".activities.QRActivity"
+            android:label="WearScript QR"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation">
+        </activity>
+          <activity android:name=".activities.SetupActivity"
+                  android:clearTaskOnLaunch="true"
+                  android:label="<%= $name %> (Setup)"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation">
+        </activity>
+          <activity android:name=".activities.StopActivity"
+                  android:clearTaskOnLaunch="true"
+                  android:launchMode="singleInstance"
+                  android:label="<%= $name %> (Stop)"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation">
+        </activity>
+          <activity android:name=".activities.LauncherActivity"
+              android:clearTaskOnLaunch="true"
+              android:launchMode="singleInstance"
+              android:label="WearScript (Launcher)"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation">
+        </activity>
         <service android:name="com.weariverse.<%= $package %>.BackgroundService"/>
         <activity
             android:name=".activities.MenuActivity"
@@ -49,10 +79,5 @@
             android:enabled="true" >
         </activity>
     </application>
-    <supports-screens android:resizeable="true"
-                      android:smallScreens="true"
-                      android:normalScreens="true"
-                      android:largeScreens="true"
-                      android:anyDensity="true" />
-
 </manifest>
+

@@ -32,8 +32,8 @@ def get_app name
   end
 
   data['sha2'] = Digest::SHA2.hexdigest(File.read("scripts/#{name}/index.html"));
-  if data['tags'].include? 'apk'
-    #TODO magically build the APK
+  if File.file? "scripts/#{name}/#{data['name']}.apk"
+    data['tags'] << 'apk'
     data['sha2-apk'] = Digest::SHA2.hexdigest(File.read("scripts/#{name}/#{data['name']}.apk"));
   end
   return data
@@ -109,6 +109,17 @@ task :apks do
     end
     Dir.chdir('..')
   end
+end
+
+desc "Compile to APK"
+task :compile, :script do |t, args|
+  script = args[:script]
+  data = get_app script
+  trigger = data['voice_trigger']
+  raise "Missing trigger" unless trigger and trigger.size > 0
+  require_relative 'lib/compiler'
+  apk_path = Compiler.do("scripts/#{script}/index.html", script, trigger)
+  FileUtils.mv apk_path, "scripts/#{script}/#{script}.apk"
 end
 
 desc "Make a new script"
