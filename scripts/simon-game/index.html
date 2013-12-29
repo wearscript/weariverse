@@ -1,0 +1,79 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>-->
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+  
+function onGesture(name) {
+    //WS.say("Gesture " + name);
+    
+    if (name == 'SWIPE_LEFT') {
+        WS.say("Swipe left red");
+    } else if (name == 'SWIPE_RIGHT') {
+     	WS.say("Swipe right green"); 
+    } else if (name == 'TWO_SWIPE_LEFT') {
+        WS.say("Two swipe left blue");
+    } else if (name == 'TWO_SWIPE_RIGHT') {
+        WS.say("Two swipe right yellow");
+    }
+    WS.log('onGesture: ' + name);
+}    
+
+colors = {
+    0: 'green',
+    1: 'red',
+    2: 'yellow',
+    3: 'blue'
+}
+
+function generateSequence() {
+    var seq = [];
+    // generate sequence
+    for (i = 0; i < simonLength; i++) {
+        newColor = colors[Math.floor(4 * Math.random())];
+        WS.log("Generated new color " + newColor);
+        seq.push(newColor);
+    }
+    return seq;    
+}
+
+function playSequence(seq) {
+    soundLength = 1000;
+    soundDelay = 0;
+    for (i = 0; i < simonLength; i++) {
+        (function () {
+            var color = seq[i];
+            var sd = soundDelay;
+            setTimeout(function(){WS.say(color)}, sd);        
+        })();
+        soundDelay += soundLength;
+    }
+}
+    
+function main() {
+    if (WS.scriptVersion(0)) return;
+    //WS.say("Show me that Simon");
+    WS.gestureCallback('onGesture', 'onGesture');
+    PLAY_SEQUENCE = true;
+    LISTEN_TO_SEQUENCE = false;
+    simonMode = PLAY_SEQUENCE;
+    simonLength = 14;
+    ctx = document.getElementById('canvas').getContext("2d");
+    ctx.fillStyle = "rgb(100,200,100)";
+    ctx.fillRect(0, 0, 320, 180);
+    ctx.fillStyle = "rgb(200,100,100)";
+    ctx.fillRect(320, 0, 640, 180);
+    ctx.fillStyle = "rgb(200,200,100)";
+    ctx.fillRect(0, 180, 320, 360);
+    ctx.fillStyle = "rgb(100,100,200)";
+    ctx.fillRect(320, 180, 640, 360);
+    playSequence(generateSequence());
+}
+
+window.onload = main;
+</script>
+</body>
+</html>
