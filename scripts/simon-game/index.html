@@ -11,13 +11,19 @@ function onGesture(name) {
     //WS.say("Gesture " + name);
     
     if (name == 'SWIPE_LEFT') {
-        WS.say("Swipe left red");
+        highlightColor('red');
+        WS.say("red");
     } else if (name == 'SWIPE_RIGHT') {
-     	WS.say("Swipe right green"); 
+        highlightColor('green');
+     	WS.say("green"); 
     } else if (name == 'TWO_SWIPE_LEFT') {
-        WS.say("Two swipe left blue");
+        highlightColor('blue');
+        WS.say("blue");
     } else if (name == 'TWO_SWIPE_RIGHT') {
-        WS.say("Two swipe right yellow");
+        WS.say("yellow");
+        highlightColor('yellow');
+    } else if (name == 'TAP') {
+        playSequence(generateSequence());
     }
     WS.log('onGesture: ' + name);
 }    
@@ -27,6 +33,24 @@ colors = {
     1: 'red',
     2: 'yellow',
     3: 'blue'
+}
+
+colorLookup = {
+    'green': 0,
+    'red': 1,
+    'yellow': 2,
+    'blue': 3
+}
+
+fillStyles = {
+    'highlightgreen': "rgb(155, 255, 155)",
+    'highlightred': "rgb(255, 155, 155)",
+    'highlightyellow': "rgb(255, 255, 155)",
+    'highlightblue': "rgb(155, 155, 255)",
+    'green': "rgb(100,200,100)",
+    'red': "rgb(200,100,100)",
+    'yellow': "rgb(180,180,80)",
+    'blue': "rgb(100,100,200)"
 }
 
 function generateSequence() {
@@ -47,9 +71,42 @@ function playSequence(seq) {
         (function () {
             var color = seq[i];
             var sd = soundDelay;
-            setTimeout(function(){WS.say(color)}, sd);        
+            setTimeout(function(){highlightColor(color); WS.say(color)}, sd);        
         })();
         soundDelay += soundLength;
+    }
+}
+
+function highlightColor(color) {
+    var colorIndex = colorLookup[color];
+    ctx.fillStyle = fillStyles['highlight' + color];
+    switch(colorIndex) {
+        case 0:
+            ctx.fillRect(0, 0, 320, 180);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(0, 0, 320, 180);}, 200);
+            WS.log("highlight " + colors[0]);
+            break;
+        case 1:
+            ctx.fillRect(320, 0, 640, 180);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(320, 0, 640, 180);}, 200);
+            WS.log("highlight " + colors[1]);
+            break;
+        case 2:
+            ctx.fillRect(0, 180, 320, 360);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(0, 180, 320, 360);}, 200);
+            WS.log("highlight " + colors[2]);
+            break;
+        case 3:
+            ctx.fillRect(320, 180, 640, 360);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(320, 180, 640, 360);}, 200);
+            WS.log("highlight " + colors[3]);
+            break;
+        default:
+            WS.log("highlight another color");
     }
 }
     
@@ -60,17 +117,17 @@ function main() {
     PLAY_SEQUENCE = true;
     LISTEN_TO_SEQUENCE = false;
     simonMode = PLAY_SEQUENCE;
-    simonLength = 14;
+    simonLength = 8;
     ctx = document.getElementById('canvas').getContext("2d");
-    ctx.fillStyle = "rgb(100,200,100)";
+    ctx.fillStyle = fillStyles['green']; //"rgb(100,200,100)";
     ctx.fillRect(0, 0, 320, 180);
-    ctx.fillStyle = "rgb(200,100,100)";
+    ctx.fillStyle = fillStyles['red']; // "rgb(200,100,100)";
     ctx.fillRect(320, 0, 640, 180);
-    ctx.fillStyle = "rgb(200,200,100)";
+    ctx.fillStyle = fillStyles['yellow']; //"rgb(200,200,100)";
     ctx.fillRect(0, 180, 320, 360);
-    ctx.fillStyle = "rgb(100,100,200)";
+    ctx.fillStyle = fillStyles['blue']; //"rgb(100,100,200)";
     ctx.fillRect(320, 180, 640, 360);
-    playSequence(generateSequence());
+    //playSequence(generateSequence());
 }
 
 window.onload = main;
