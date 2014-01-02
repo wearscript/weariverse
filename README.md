@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/openshades/weariverse.png?label=ready)](https://waffle.io/openshades/weariverse)  
 # WearScript Contrib
 
 So you want to share your scripts with other WearScript users? This is the repository to fork.
