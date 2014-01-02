@@ -38,7 +38,7 @@ def get_app name
 
   data['authors'] = data['authors'].map do |a|
     if File.file? "authors/#{a}.json"
-       a = get_author a
+      a = get_author a
     end
     a
   end
@@ -62,10 +62,19 @@ task :sync do
 
   unless directory
     directory = storage.directories.create(
-        key: S3_BUCKET, # globally unique name
-        public: true
+      key: S3_BUCKET, # globally unique name
+      public: true
     )
   end
+  cors =  {'CORSConfiguration' =>
+           [
+             {
+               'AllowedOrigin' => '*',
+               'AllowedMethod' => ['GET'],
+             }
+           ]
+  }
+  storage.put_bucket_cors(S3_BUCKET, cors)
 
   Dir.chdir('scripts')
   ids = Dir.glob('*')
@@ -95,8 +104,8 @@ task :apks do
 
   unless directory
     directory = storage.directories.create(
-        key: S3_BUCKET, # globally unique name
-        public: true
+      key: S3_BUCKET, # globally unique name
+      public: true
     )
   end
 
