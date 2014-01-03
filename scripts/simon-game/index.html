@@ -15,7 +15,7 @@ function onGesture(name) {
         WS.say("red");
     } else if (name == 'SWIPE_RIGHT') {
         highlightColor('green');
-     	WS.say("green"); 
+        WS.say("green"); 
     } else if (name == 'TWO_SWIPE_LEFT') {
         highlightColor('blue');
         WS.say("blue");
@@ -23,7 +23,15 @@ function onGesture(name) {
         WS.say("yellow");
         highlightColor('yellow');
     } else if (name == 'TAP') {
-        playSequence(generateSequence());
+        WS.log("Got tap.");
+        (function () {
+            var theSequence = generateSequence();
+            var theListenCB = function () {
+                listenForInputSeq(theSequence);
+            }
+            playSequenceCB(generateSequence(), function() {WS.log("Called the callback"); theListenCB();});
+            
+        })();
     }
     WS.log('onGesture: ' + name);
 }    
@@ -53,6 +61,35 @@ fillStyles = {
     'blue': "rgb(100,100,200)"
 }
 
+function startGame() {
+    startLen = 2;
+    var gameSeq = generateSequence(startLen);
+    playSequenceCB(gameSeq, listenForInput);    
+}
+
+var listenForInput = function() {
+    WS.log("Listening for input"); // should write the sequence
+}
+
+var LISTENING = false;
+
+var listenForInputSeq = function(sequence) {
+    WS.log("Listening for input " + sequence); // should write the sequence
+
+}
+
+function generateSequence(len) {
+    var seq = [];
+    // generate sequence
+    for (i = 0; i < len; i++) {
+        newColor = colors[Math.floor(4 * Math.random())];
+        WS.log("Generated new color " + newColor);
+        seq.push(newColor);
+    }
+    return seq;    
+}
+
+// global variable determines length
 function generateSequence() {
     var seq = [];
     // generate sequence
@@ -64,7 +101,38 @@ function generateSequence() {
     return seq;    
 }
 
+function extendSequence(seq) {
+    var newColor = colors[Math.floor(4 * Math.random())];
+    return seq.push(newColor);
+}
+
+function playSequenceCB(seq, cb) {
+    WS.log("play sequence with two args"); // this doesn't show up... 
+    soundLength = 1000;
+    soundDelay = 0;
+    for (i = 0; i < simonLength; i++) {
+        if (i < simonLength - 1) {
+            WS.log("highlight color without end callback");
+            (function () {
+                var color = seq[i];
+                var sd = soundDelay;
+                setTimeout(function(){highlightColor(color); WS.say(color)}, sd);        
+            })();
+            soundDelay += soundLength;
+        } else if (i == simonLength - 1) {
+            WS.log("highlight color with end callback");
+            (function () {
+                var color = seq[i];
+                var sd = soundDelay;
+                setTimeout(function(){highlightColor(color); WS.say(color); cb();}, sd);        
+            })();            
+        }
+    }
+}
+
+
 function playSequence(seq) {
+    WS.log("playSequence with one arg");
     soundLength = 1000;
     soundDelay = 0;
     for (i = 0; i < simonLength; i++) {
