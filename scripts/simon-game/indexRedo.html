@@ -15,7 +15,7 @@ var SIMON = (function() {
 
     function initialize() {
         theSequence = generateSequence(generateLength);
-        currentLength = 2;
+        currentLength = 1;
         listening = false;
         playing = false;
         listenPointer = 0;
@@ -63,6 +63,7 @@ var SIMON = (function() {
             WS.log("Found right color " + theRightColor);
             advanceListening();
         } else {
+            WS.log("Found wrong color " + colorFromGesture[name] + " instead of " + theRightColor);
             gameover();
         }
         return null;
@@ -76,9 +77,10 @@ var SIMON = (function() {
     function advanceListening() {
         WS.log("Advancing listen pointer " + listenPointer);
         // check off-by-one
-        if (listenPointer < currentLength) {
+        if (listenPointer < currentLength - 1) {
             listenPointer += 1
-        } else if (listenPointer == currentLength) { // ADVANCE
+        } else if (listenPointer == currentLength - 1) { // ADVANCE
+            listenPointer = 0;
             listening = false;
             currentLength += 1;
             playSequence();
@@ -110,7 +112,7 @@ var SIMON = (function() {
     function listenForSequence() {
         listening = true;
         // check off-by-one
-        WS.log("Listening for sequence " + theSequence.slice(0, currentLength + 1));
+        WS.log("Listening for sequence " + theSequence.slice(0, currentLength));
         // if (!latestIsCorrect) {
         //     quitGame();
         // }
@@ -210,6 +212,13 @@ gestureLookup = {
     'red': 'SWIPE_LEFT',
     'yellow':'TWO_SWIPE_RIGHT',
     'blue': 'TWO_SWIPE_LEFT',
+}
+
+colorFromGesture = {
+    'SWIPE_RIGHT': 'green',
+    'SWIPE_LEFT': 'red',
+    'TWO_SWIPE_RIGHT': 'yellow',
+    'TWO_SWIPE_LEFT': 'blue'
 }
 
 fillStyles = {
