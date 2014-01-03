@@ -1,0 +1,366 @@
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>-->
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="canvas" width="640" height="360" style="display:block"></canvas>
+<script>
+
+var SIMON = (function() {
+    var isActive = false, playing = false, listening = false;
+    var generateLength = 30;
+    var theSequence, currentLength;
+    var listenPointer = 0;
+
+    function initialize() {
+        theSequence = generateSequence(generateLength);
+        currentLength = 2;
+        listening = false;
+        playing = false;
+        listenPointer = 0;
+    }
+
+    function generateSequence() {
+        var seq = [];
+        // generate sequence
+        for (i = 0; i < generateLength; i++) {
+            newColor = colors[Math.floor(4 * Math.random())];
+            WS.log("Generated new color " + newColor);
+            seq.push(newColor);
+        }
+        return seq;    
+    }
+
+    function active() {
+        return isActive; 
+    }
+
+    function start() {
+        WS.log("starting simon from SIMON");
+        isActive = true;
+        playGame();
+    }
+
+    function stop() {
+        WS.log("stopping simon from SIMON");
+        isActive = false;
+    }
+
+    function onGesture(name) {
+        if (name == 'TAP') {
+            stop();
+        }
+        if (listening) {
+            onGestureListening(name);
+        }
+    }
+
+    // todo: shouldn't gameover for erroneous (meaningless) gestures
+    function onGestureListening(name) {
+        theRightColor = theSequence[listenPointer];
+        if (name == gestureLookup[theRightColor]) {
+            WS.log("Found right color " + theRightColor);
+            advanceListening();
+        } else {
+            gameover();
+        }
+        return null;
+    }
+
+    function gameover() {
+        WS.say("Game over.");
+        playing = false;
+    }
+
+    function advanceListening() {
+        WS.log("Advancing listen pointer " + listenPointer);
+        // check off-by-one
+        if (listenPointer < currentLength) {
+            listenPointer += 1
+        } else if (listenPointer == currentLength) { // ADVANCE
+            listening = false;
+            currentLength += 1;
+            playSequence();
+        }
+    }
+
+    function onGesturePlayback(name) {
+        return null;
+    }
+
+
+    // the try/finally isn't going to work this way because playSequence returns
+    function playGame() {
+        if (playing == true) {
+            WS.log("Already playing.");
+            return;
+        } else {
+            try {    
+                WS.log("Starting game");
+                playing = true;
+                initialize();
+                playSequence();
+            } finally {
+                playing = false;
+            }
+        }
+    }
+
+    function listenForSequence() {
+        listening = true;
+        // check off-by-one
+        WS.log("Listening for sequence " + theSequence.slice(0, currentLength + 1));
+        // if (!latestIsCorrect) {
+        //     quitGame();
+        // }
+        // if (latestIsCorrect && notDone) {
+        //     continueListening();
+        // } else if (latestIsCorrect && done) {
+        //     extendSequence();
+        //     playSequence();
+        // }
+    }
+
+    function playSequence() {
+        WS.log("play sequence with listen callback"); // this doesn't show up... 
+        soundLength = 1000;
+        soundDelay = 0;
+        for (i = 0; i < currentLength; i++) {
+            if (i < currentLength - 1) {
+                WS.log("highlight color without end callback");
+                (function () {
+                    var color = theSequence[i];
+                    var sd = soundDelay;
+                    setTimeout(function(){highlightColor(color); WS.say(color)}, sd);        
+                })();
+                soundDelay += soundLength;
+            } else if (i == currentLength - 1) {
+                WS.log("highlight color with end callback");
+                (function () {
+                    var color = theSequence[i];
+                    var sd = soundDelay;
+                    setTimeout(function(){highlightColor(color); WS.say(color); listenForSequence();}, sd);        
+                })();            
+            }
+        }
+    }
+
+    return {
+        ACTIVE: active,
+        start: start,
+        stop: stop,
+        onGesture: onGesture,
+        play: playGame
+    };
+
+})();
+  
+function onGesture(name) {
+    //WS.say("Gesture " + name);
+    if (SIMON.ACTIVE()) {
+        WS.log("SIMON will handle this gesture: " + name);
+        SIMON.onGesture(name);
+        return;
+    } 
+
+    if (name == 'SWIPE_LEFT') {
+        highlightColor('red');
+        WS.say("red");
+    } else if (name == 'SWIPE_RIGHT') {
+        highlightColor('green');
+        WS.say("green"); 
+    } else if (name == 'TWO_SWIPE_LEFT') {
+        highlightColor('blue');
+        WS.say("blue");
+    } else if (name == 'TWO_SWIPE_RIGHT') {
+        WS.say("yellow");
+        highlightColor('yellow');
+    } else if (name == 'TAP') {
+        WS.log("Got tap.");
+        if (SIMON.ACTIVE() === false) {
+            WS.say("Starting Simon");
+            SIMON.start();
+        } else if (SIMON.ACTIVE() === true) {
+            WS.say("Stopping Simon");
+            SIMON.stop();
+        } else {
+            WS.say("Simon not initialized");
+        }
+    }
+    WS.log('onGesture: ' + name);
+}    
+
+colors = {
+    0: 'green',
+    1: 'red',
+    2: 'yellow',
+    3: 'blue'
+}
+
+colorLookup = {
+    'green': 0,
+    'red': 1,
+    'yellow': 2,
+    'blue': 3
+}
+
+gestureLookup = {
+    'green': 'SWIPE_RIGHT',
+    'red': 'SWIPE_LEFT',
+    'yellow':'TWO_SWIPE_RIGHT',
+    'blue': 'TWO_SWIPE_LEFT',
+}
+
+fillStyles = {
+    'highlightgreen': "rgb(155, 255, 155)",
+    'highlightred': "rgb(255, 155, 155)",
+    'highlightyellow': "rgb(255, 255, 155)",
+    'highlightblue': "rgb(155, 155, 255)",
+    'green': "rgb(100,200,100)",
+    'red': "rgb(200,100,100)",
+    'yellow': "rgb(180,180,80)",
+    'blue': "rgb(100,100,200)"
+}
+
+function startGame() {
+    startLen = 2;
+    var gameSeq = generateSequence(startLen);
+    playSequenceCB(gameSeq, listenForInput);    
+}
+
+var listenForInput = function() {
+    WS.log("Listening for input"); // should write the sequence
+}
+
+var LISTENING = false;
+
+var listenForInputSeq = function(sequence) {
+    WS.log("Listening for input " + sequence); // should write the sequence
+
+}
+
+function generateSequence(len) {
+    var seq = [];
+    // generate sequence
+    for (i = 0; i < len; i++) {
+        newColor = colors[Math.floor(4 * Math.random())];
+        WS.log("Generated new color " + newColor);
+        seq.push(newColor);
+    }
+    return seq;    
+}
+
+// global variable determines length
+function generateSequence() {
+    var seq = [];
+    // generate sequence
+    for (i = 0; i < simonLength; i++) {
+        newColor = colors[Math.floor(4 * Math.random())];
+        WS.log("Generated new color " + newColor);
+        seq.push(newColor);
+    }
+    return seq;    
+}
+
+function extendSequence(seq) {
+    var newColor = colors[Math.floor(4 * Math.random())];
+    return seq.push(newColor);
+}
+
+function playSequenceCB(seq, cb) {
+    WS.log("play sequence with two args"); // this doesn't show up... 
+    soundLength = 1000;
+    soundDelay = 0;
+    for (i = 0; i < simonLength; i++) {
+        if (i < simonLength - 1) {
+            WS.log("highlight color without end callback");
+            (function () {
+                var color = seq[i];
+                var sd = soundDelay;
+                setTimeout(function(){highlightColor(color); WS.say(color)}, sd);        
+            })();
+            soundDelay += soundLength;
+        } else if (i == simonLength - 1) {
+            WS.log("highlight color with end callback");
+            (function () {
+                var color = seq[i];
+                var sd = soundDelay;
+                setTimeout(function(){highlightColor(color); WS.say(color); cb();}, sd);        
+            })();            
+        }
+    }
+}
+
+
+function playSequence(seq) {
+    WS.log("playSequence with one arg");
+    soundLength = 1000;
+    soundDelay = 0;
+    for (i = 0; i < simonLength; i++) {
+        (function () {
+            var color = seq[i];
+            var sd = soundDelay;
+            setTimeout(function(){highlightColor(color); WS.say(color)}, sd);        
+        })();
+        soundDelay += soundLength;
+    }
+}
+
+function highlightColor(color) {
+    var colorIndex = colorLookup[color];
+    ctx.fillStyle = fillStyles['highlight' + color];
+    switch(colorIndex) {
+        case 0:
+            ctx.fillRect(0, 0, 320, 180);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(0, 0, 320, 180);}, 200);
+            WS.log("highlight " + colors[0]);
+            break;
+        case 1:
+            ctx.fillRect(320, 0, 640, 180);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(320, 0, 640, 180);}, 200);
+            WS.log("highlight " + colors[1]);
+            break;
+        case 2:
+            ctx.fillRect(0, 180, 320, 360);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(0, 180, 320, 360);}, 200);
+            WS.log("highlight " + colors[2]);
+            break;
+        case 3:
+            ctx.fillRect(320, 180, 640, 360);
+            ctx.fillStyle = fillStyles[color];
+            setTimeout(function() {ctx.fillRect(320, 180, 640, 360);}, 200);
+            WS.log("highlight " + colors[3]);
+            break;
+        default:
+            WS.log("highlight another color");
+    }
+}
+    
+function main() {
+    if (WS.scriptVersion(0)) return;
+    //WS.say("Show me that Simon");
+    WS.gestureCallback('onGesture', 'onGesture');
+    PLAY_SEQUENCE = true;
+    LISTEN_TO_SEQUENCE = false;
+    simonMode = PLAY_SEQUENCE;
+    simonLength = 8;
+    ctx = document.getElementById('canvas').getContext("2d");
+    ctx.fillStyle = fillStyles['green']; //"rgb(100,200,100)";
+    ctx.fillRect(0, 0, 320, 180);
+    ctx.fillStyle = fillStyles['red']; // "rgb(200,100,100)";
+    ctx.fillRect(320, 0, 640, 180);
+    ctx.fillStyle = fillStyles['yellow']; //"rgb(200,200,100)";
+    ctx.fillRect(0, 180, 320, 360);
+    ctx.fillStyle = fillStyles['blue']; //"rgb(100,100,200)";
+    ctx.fillRect(320, 180, 640, 360);
+    //playSequence(generateSequence());
+}
+
+window.onload = main;
+</script>
+</body>
+</html>
