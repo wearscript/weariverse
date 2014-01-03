@@ -61,6 +61,8 @@ var SIMON = (function() {
         theRightColor = theSequence[listenPointer];
         if (name == gestureLookup[theRightColor]) {
             WS.log("Found right color " + theRightColor);
+            highlightColor(theRightColor);
+            //WS.say(theRightColor);
             advanceListening();
         } else {
             WS.log("Found wrong color " + colorFromGesture[name] + " instead of " + theRightColor);
@@ -111,17 +113,7 @@ var SIMON = (function() {
 
     function listenForSequence() {
         listening = true;
-        // check off-by-one
         WS.log("Listening for sequence " + theSequence.slice(0, currentLength));
-        // if (!latestIsCorrect) {
-        //     quitGame();
-        // }
-        // if (latestIsCorrect && notDone) {
-        //     continueListening();
-        // } else if (latestIsCorrect && done) {
-        //     extendSequence();
-        //     playSequence();
-        // }
     }
 
     function playSequence() {
@@ -321,31 +313,51 @@ function highlightColor(color) {
     ctx.fillStyle = fillStyles['highlight' + color];
     switch(colorIndex) {
         case 0:
-            ctx.fillRect(0, 0, 320, 180);
-            ctx.fillStyle = fillStyles[color];
-            setTimeout(function() {ctx.fillRect(0, 0, 320, 180);}, 200);
             WS.log("highlight " + colors[0]);
+            ctx.fillRect(0, 0, 320, 180);
+            (function() {
+                var fillColor = fillStyles[color];
+                setTimeout(function() {
+                    ctx.fillStyle = fillColor;
+                    ctx.fillRect(0, 0, 320, 180);
+                }, 200);
+            })();
             break;
         case 1:
-            ctx.fillRect(320, 0, 640, 180);
-            ctx.fillStyle = fillStyles[color];
-            setTimeout(function() {ctx.fillRect(320, 0, 640, 180);}, 200);
             WS.log("highlight " + colors[1]);
+            ctx.fillRect(320, 0, 640, 180);
+            (function() {
+                var fillColor = fillStyles[color];
+                setTimeout(function() {
+                    ctx.fillStyle = fillColor;
+                    ctx.fillRect(320, 0, 640, 180);
+                }, 200);
+            })();            
             break;
         case 2:
-            ctx.fillRect(0, 180, 320, 360);
-            ctx.fillStyle = fillStyles[color];
-            setTimeout(function() {ctx.fillRect(0, 180, 320, 360);}, 200);
             WS.log("highlight " + colors[2]);
+            ctx.fillRect(0, 180, 320, 360);
+            (function() {
+                var fillColor = fillStyles[color];
+                setTimeout(function() {
+                    ctx.fillStyle = fillColor;
+                    ctx.fillRect(0, 180, 320, 360);
+                }, 200);
+            })();            
             break;
         case 3:
-            ctx.fillRect(320, 180, 640, 360);
-            ctx.fillStyle = fillStyles[color];
-            setTimeout(function() {ctx.fillRect(320, 180, 640, 360);}, 200);
             WS.log("highlight " + colors[3]);
+            ctx.fillRect(320, 180, 640, 360);
+            (function() {
+                var fillColor = fillStyles[color];
+                setTimeout(function() {
+                    ctx.fillStyle = fillColor;
+                    ctx.fillRect(320, 180, 640, 360);
+                }, 200);
+            })();            
             break;
         default:
-            WS.log("highlight another color");
+            WS.log("highlight another color " + color);
     }
 }
     
