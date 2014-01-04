@@ -44,6 +44,7 @@ var SIMON = (function() {
 
     function stop() {
         WS.log("stopping simon from SIMON");
+        setTimeout(function() {drawBackground(); drawTitleOverlay();}, 3000);
         isActive = false;
     }
 
@@ -73,8 +74,9 @@ var SIMON = (function() {
     }
 
     function gameover() {
-        WS.say("Game over.");
+        setTimeout(function() {WS.say("Game over.");}, 1000);
         playing = false;
+        drawGameoverOverlay();
         stop();
     }
 
@@ -104,9 +106,10 @@ var SIMON = (function() {
         } else {
             try {    
                 WS.log("Starting game");
+                drawBackground();
                 playing = true;
                 initialize();
-                setTimeout(function() {playSequence();}, 1500);
+                setTimeout(function() {playSequence();}, 2000);
             } finally {
                 playing = false;
             }
@@ -363,7 +366,41 @@ function highlightColor(color) {
             WS.log("highlight another color " + color);
     }
 }
-    
+
+function drawTitleOverlay() {
+    ctx = document.getElementById('canvas').getContext("2d");
+    var titleBase = 170;
+    var subtitleBase = 240;
+    ctx.font = '72pt Calibri';
+    ctx.fillStyle = '#000000';
+    ctx.fillText('WearSimon', 71, titleBase);
+    ctx.font = '28pt Calibri';
+    ctx.fillText('TAP TO START!', 175, subtitleBase);
+}
+
+function drawGameoverOverlay() {
+    ctx = document.getElementById('canvas').getContext("2d");
+    var titleBase = 170;
+    var subtitleBase = 240;
+    ctx.font = '72pt Calibri';
+    ctx.fillStyle = '#000000';
+    ctx.fillText('GAME OVER', 45, titleBase);
+    ctx.font = '28pt Calibri';
+    ctx.fillText('TRY AGAIN', 200, subtitleBase);
+}
+
+function drawBackground() { 
+    ctx = document.getElementById('canvas').getContext("2d");
+    ctx.fillStyle = fillStyles['green']; //"rgb(100,200,100)";
+    ctx.fillRect(0, 0, 320, 180);
+    ctx.fillStyle = fillStyles['red']; // "rgb(200,100,100)";
+    ctx.fillRect(320, 0, 640, 180);
+    ctx.fillStyle = fillStyles['yellow']; //"rgb(200,200,100)";
+    ctx.fillRect(0, 180, 320, 360);
+    ctx.fillStyle = fillStyles['blue']; //"rgb(100,100,200)";
+    ctx.fillRect(320, 180, 640, 360);
+}
+
 function main() {
     if (WS.scriptVersion(0)) return;
     //WS.say("Show me that Simon");
@@ -381,7 +418,10 @@ function main() {
     ctx.fillRect(0, 180, 320, 360);
     ctx.fillStyle = fillStyles['blue']; //"rgb(100,100,200)";
     ctx.fillRect(320, 180, 640, 360);
-    //playSequence(generateSequence());
+
+    drawBackground();
+    drawTitleOverlay();
+
 }
 
 window.onload = main;
