@@ -48,9 +48,6 @@ var SIMON = (function() {
     }
 
     function onGesture(name) {
-        if (name == 'TAP') {
-            stop();
-        }
         if (listening) {
             onGestureListening(name);
         }
@@ -58,6 +55,10 @@ var SIMON = (function() {
 
     // todo: shouldn't gameover for erroneous (meaningless) gestures
     function onGestureListening(name) {
+        if (!colorFromGesture.hasOwnProperty(name)) {
+            WS.log("Invalid input for color. " + name);
+            return;
+        }
         theRightColor = theSequence[listenPointer];
         if (name == gestureLookup[theRightColor]) {
             WS.log("Found right color " + theRightColor);
@@ -104,7 +105,7 @@ var SIMON = (function() {
                 WS.log("Starting game");
                 playing = true;
                 initialize();
-                playSequence();
+                setTimeout(function() {playSequence();}, 1500);
             } finally {
                 playing = false;
             }
@@ -223,6 +224,7 @@ fillStyles = {
     'yellow': "rgb(180,180,80)",
     'blue': "rgb(100,100,200)"
 }
+
 
 function startGame() {
     startLen = 2;
