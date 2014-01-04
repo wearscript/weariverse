@@ -1,0 +1,23 @@
+{
+  "name": "WearSimon",
+  "authors": [
+    "scottgwald"
+  ],
+
+  "description": "A WearScript rendition of the classic electronic game http://en.wikipedia.org/wiki/Simon_(game).",
+  "screenshots": [
+  ],
+
+  "require": [
+  ],
+
+  "includes": [
+  ],
+
+  "tags": [
+    "game"
+  ],
+
+  "video": "",
+  "remixes": ""
+}
