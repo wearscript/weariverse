@@ -75,6 +75,7 @@ var SIMON = (function() {
     function gameover() {
         WS.say("Game over.");
         playing = false;
+        stop();
     }
 
     function advanceListening() {
@@ -86,7 +87,7 @@ var SIMON = (function() {
             listenPointer = 0;
             listening = false;
             currentLength += 1;
-            playSequence();
+            setTimeout(function() {playSequence();}, 1100);
         }
     }
 
