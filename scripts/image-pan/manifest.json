@@ -1,11 +1,7 @@
 {
   "name": "Image Panning Sample",
   "authors": [
-    {
-      "name": "Scott Greenwald",
-      "github": "scottgwald",
-      "email": "swgreen@mit.edu"
-    }
+    "scottgwald"
   ],
 
   "description": "Head motion pans around an image of the inside of the Sagrada Familia Basilica in Barcelona.",

@@ -2,11 +2,7 @@
   "name": "Rotation Vector Demo",
 
   "authors": [
-    {
-      "name": "Scott Greenwald",
-      "email": "swgreen@mit.edu",
-      "github": "scottgwald"
-    }
+    "scottgwald"
   ],
 
   "description": "Shows orientation derived from rotation vector",
