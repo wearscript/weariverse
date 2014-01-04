@@ -12,6 +12,7 @@ var SIMON = (function() {
     var generateLength = 30;
     var theSequence, currentLength;
     var listenPointer = 0;
+    var highscore = 0;
 
     function initialize() {
         theSequence = generateSequence(generateLength);
@@ -44,7 +45,7 @@ var SIMON = (function() {
 
     function stop() {
         WS.log("stopping simon from SIMON");
-        setTimeout(function() {drawBackground(); drawTitleOverlay();}, 3000);
+        setTimeout(function() {drawBackground(); drawTitleWithScores(score, highscore);}, 3000);
         isActive = false;
     }
 
@@ -74,9 +75,11 @@ var SIMON = (function() {
     }
 
     function gameover() {
+        score = currentLength - 1;
+        highscore = Math.max(score, highscore);
         setTimeout(function() {WS.say("Game over.");}, 1000);
         playing = false;
-        drawGameoverOverlay();
+        drawGameoverWithScore(score);
         stop();
     }
 
@@ -378,6 +381,22 @@ function drawTitleOverlay() {
     ctx.fillText('TAP TO START!', 175, subtitleBase);
 }
 
+function drawTitleWithScores(score, highscore) {
+    var upperBase = 40;
+    ctx = document.getElementById('canvas').getContext("2d");
+    var titleBase = 170;
+    var subtitleBase = 240;
+    ctx.font = '72pt Calibri';
+    ctx.fillStyle = '#000000';
+    ctx.fillText('WearSimon', 71, titleBase);
+    ctx.font = '28pt Calibri';
+    ctx.fillText('TAP TO START!', 175, subtitleBase);
+    ctx.font = '28pt Calibri';
+    ctx.textAlign = 'left';
+    ctx.fillText('high score: ' + highscore, 10, upperBase);
+    ctx.fillText('latest score: ' + score, 330, upperBase);
+}
+
 function drawGameoverOverlay() {
     ctx = document.getElementById('canvas').getContext("2d");
     var titleBase = 170;
@@ -387,6 +406,17 @@ function drawGameoverOverlay() {
     ctx.fillText('GAME OVER', 45, titleBase);
     ctx.font = '28pt Calibri';
     ctx.fillText('TRY AGAIN', 200, subtitleBase);
+}
+
+function drawGameoverWithScore(score) {
+    ctx = document.getElementById('canvas').getContext("2d");
+    var titleBase = 170;
+    var subtitleBase = 240;
+    ctx.font = '72pt Calibri';
+    ctx.fillStyle = '#000000';
+    ctx.fillText('GAME OVER', 45, titleBase);
+    ctx.font = '28pt Calibri';
+    ctx.fillText('SCORE: ' + score, 200, subtitleBase);
 }
 
 function drawBackground() { 
