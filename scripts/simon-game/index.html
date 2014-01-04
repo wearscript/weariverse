@@ -64,6 +64,7 @@ var SIMON = (function() {
         theRightColor = theSequence[listenPointer];
         if (name == gestureLookup[theRightColor]) {
             WS.log("Found right color " + theRightColor);
+            WS.sound('SELECTED');
             highlightColor(theRightColor);
             //WS.say(theRightColor);
             advanceListening();
@@ -89,6 +90,7 @@ var SIMON = (function() {
         if (listenPointer < currentLength - 1) {
             listenPointer += 1
         } else if (listenPointer == currentLength - 1) { // ADVANCE
+            WS.sound('SUCCESS');
             listenPointer = 0;
             listening = false;
             currentLength += 1;
