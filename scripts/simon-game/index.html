@@ -161,26 +161,15 @@ var SIMON = (function() {
 })();
   
 function onGesture(name) {
+    WS.log('onGesture: ' + name);
     //WS.say("Gesture " + name);
     if (SIMON.ACTIVE()) {
         WS.log("SIMON will handle this gesture: " + name);
         SIMON.onGesture(name);
         return;
-    } 
+    }
 
-    if (name == 'SWIPE_LEFT') {
-        highlightColor('red');
-        WS.say("red");
-    } else if (name == 'SWIPE_RIGHT') {
-        highlightColor('green');
-        WS.say("green"); 
-    } else if (name == 'TWO_SWIPE_LEFT') {
-        highlightColor('blue');
-        WS.say("blue");
-    } else if (name == 'TWO_SWIPE_RIGHT') {
-        WS.say("yellow");
-        highlightColor('yellow');
-    } else if (name == 'TAP') {
+    if (name == 'TAP') {
         WS.log("Got tap.");
         if (SIMON.ACTIVE() === false) {
             WS.say("Starting Simon");
@@ -191,8 +180,17 @@ function onGesture(name) {
         } else {
             WS.say("Simon not initialized");
         }
+
     }
-    WS.log('onGesture: ' + name);
+
+    if (!colorFromGesture.hasOwnProperty(name)) {
+        WS.log("Invalid input for color. " + name);
+        return;
+    }
+
+    theColor = colorFromGesture[name];
+    highlightColor(theColor);
+    WS.say(theColor);
 }    
 
 colors = {
@@ -211,15 +209,15 @@ colorLookup = {
 
 gestureLookup = {
     'green': 'SWIPE_RIGHT',
-    'red': 'SWIPE_LEFT',
-    'yellow':'TWO_SWIPE_RIGHT',
+    'red': 'TWO_SWIPE_RIGHT',
+    'yellow':'SWIPE_LEFT',
     'blue': 'TWO_SWIPE_LEFT',
 }
 
 colorFromGesture = {
     'SWIPE_RIGHT': 'green',
-    'SWIPE_LEFT': 'red',
-    'TWO_SWIPE_RIGHT': 'yellow',
+    'SWIPE_LEFT': 'yellow',
+    'TWO_SWIPE_RIGHT': 'red',
     'TWO_SWIPE_LEFT': 'blue'
 }
 
