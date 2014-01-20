@@ -28,9 +28,10 @@ var WearENV = (function () {
     var envStarted = false;
 
     // BEGIN GENERIC BOILERPLATE
+    
     function extend(a, b) {
         for( var i in b ) {
-                a[i] = b[i];
+            a[i] = b[i];
         }
     }
 
@@ -184,6 +185,32 @@ var WearENV = (function () {
 
     // BEGIN APP STUFF INCLUDING OVERRIDES
 
+    // "this" refers to the config object of the Handler
+    function sensorStartFn(sensorName) {
+        return function() {
+            canvas = document.getElementById('wearCanvas');
+            context = canvas.getContext('2d');
+            WS.sensorOn(WS.sensor(sensorName), .15, 'WearENV.cb');
+            if (log) {
+                WS.serverConnect('{{WSUrl}}', 'WearENV.server');
+            }
+            console.log(this.parentHandler);
+            if (DBG) console.log("Initializing " + this.prettyName + " mode 2345234");
+            WS.say(this.prettyName + "mode");
+            clearCanvas();
+            drawModeName(this.prettyName);
+            modeInit = true;
+            errorLogged = false;
+        }
+    }
+
+    function sensorFinishFn(sensorName) {
+        return function() {
+            if (DBG) console.log("Turning off sensor " + sensorName);
+            WS.sensorOff(WS.sensor(sensorName));
+            modeInit = false;
+        }
+    }
 
     // this is really the default for an orientation SensorModeHandler
     //@override
@@ -248,63 +275,53 @@ var WearENV = (function () {
             },        
     });
 
-    // "this" refers to the config object of the Handler
-    function sensorStartFn(sensorName) {
-        return function() {
-            canvas = document.getElementById('wearCanvas');
-            context = canvas.getContext('2d');
-            WS.sensorOn(WS.sensor(sensorName), .15, 'WearENV.cb');
-            if (log) {
-                WS.serverConnect('{{WSUrl}}', 'WearENV.server');
-            }
-            console.log(this.parentHandler);
-            if (DBG) console.log("Initializing " + this.prettyName + " mode 2345234");
-            WS.say(this.prettyName + "mode");
-            clearCanvas();
-            drawModeName(this.prettyName);
-            modeInit = true;
-            errorLogged = false;
-        }
-    }
-
-    // do the same thing as above except not defined in default
-    new ModeHandler("orientation2", {
-            prettyName: "Orientation explorer 2", 
-            drawCallback: orientationDrawCB,
+    new ModeHandler("accelerometer", {
             // in here, "this" refers to the config object
             // and if you want to get to the Handler itself, this.parentHandler
-            start: function() {
-                canvas = document.getElementById('wearCanvas');
-                context = canvas.getContext('2d');
-                WS.sensorOn(WS.sensor('orientation'), .15, 'WearENV.cb');
-                if (log) {
-                    WS.serverConnect('{{WSUrl}}', 'WearENV.server');
+            prettyName: "Accelerometer explorer", 
+            start: sensorStartFn('accelerometer'),
+            drawCallback: function(data) {
+                if (data['type'] == WS.sensor('accelerometer')) {
+                    context.fillStyle = 'hsl(' + Math.floor(15 * Math.abs(data['values'][0])) + ', 90%, 50%)';
+                    context.fillRect(0, 0, 640, 120);
+                    context.fillStyle = 'hsl(' + Math.floor(15 * Math.abs(data['values'][1])) + ', 90%, 50%)';
+                    context.fillRect(0, 120, 640, 120);
+                    context.fillStyle = 'hsl(' + Math.floor(15 * Math.abs(data['values'][2])) + ', 90%, 50%)';
+                    context.fillRect(0, 240, 640, 120);
                 }
-                console.log(this.parentHandler);
-                if (DBG) console.log("Initializing " + this.prettyName + " mode 2345234");
-                WS.say(this.prettyName + "mode");
-                clearCanvas();
-                drawModeName(this.prettyName);
-                modeInit = true;
-                errorLogged = false;
-                // this.parentHandler.defaultStart();
-            }        
+            },
+            finish: sensorFinishFn('accelerometer')
     });
 
-    // do the same thing as above except not defined in default
-    new ModeHandler("orientation3", {
-            prettyName: "Orientation explorer 3", 
-            drawCallback: orientationDrawCB,
+    new ModeHandler("magnetometer", {
             // in here, "this" refers to the config object
             // and if you want to get to the Handler itself, this.parentHandler
-            start: sensorStartFn('orientation')
+            prettyName: "Magnetic field explorer", 
+            start: sensorStartFn('magneticField'),
+            drawCallback: function(data) {
+                if (data['type'] == WS.sensor('magneticField')) {
+                    context.fillStyle = 'hsl(' + data['values'][0] + ', 90%, 50%)';
+                    context.fillRect(0, 0, 640, 120);
+                    context.fillStyle = 'hsl(' + data['values'][1] + ', 90%, 50%)';
+                    context.fillRect(0, 120, 640, 120);
+                    context.fillStyle = 'hsl(' + data['values'][2] + ', 90%, 50%)';
+                    context.fillRect(0, 240, 640, 120);
+                }
+            },
+            finish: sensorFinishFn('magneticField')
     });
 
-    // // MAGNETOMETER
-    // new ModeHandler("magnetometer", {
-    //     prettyName: "Magnetometer Explorer",
-    //     drawCallback: 
-    // })
+    new ModeHandler("light", {
+        prettyName: "Light Sensor Explorer",
+        start: sensorStartFn('light'),
+        drawCallback: function(data) {
+            if (data['type'] == WS.sensor('light')) {
+                context.fillStyle = 'hsl(153, 90%, ' + Math.floor(10 * Math.log(data['values'][0])) + '%)';
+                context.fillRect(0, 0, 640, 360);
+            }
+        },
+        finish: sensorFinishFn('light')
+    });
 
     return {
         onGesture: onGesture,
