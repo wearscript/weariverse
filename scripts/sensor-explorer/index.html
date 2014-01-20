@@ -1,0 +1,326 @@
+<!--
+App with multiple modes that are driven by sensor callbacks
+TODO: think about what to do in order to support drawing
+    triggered in different ways, such as animation
+-->
+
+<html style="width:100%; height:100%; overflow:hidden">
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
+<!--
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js">
+</script>-->
+</head>
+<body style="width:100%; height:100%; overflow:hidden; margin:0">
+<canvas id="wearCanvas" width="640" height="360" style="display:block"></canvas>
+<script>
+
+var WearENV = (function () {
+    var isActive = false, mode = 'colors';
+    var DBG = true; var log = false;
+    var modes = [];
+    var modePointer = 0;
+    var modeInit = false;
+    var errorLogged = false;
+    var modeHandlerMapping = {};
+    var serverConnected = false;
+    var welcomeHandlerName = 'welcome';
+    var envStarted = false;
+
+    // BEGIN GENERIC BOILERPLATE
+    function extend(a, b) {
+        for( var i in b ) {
+                a[i] = b[i];
+        }
+    }
+
+    function startEnv() {
+        var handler = modeHandlerMapping[welcomeHandlerName];
+        handler.config.start();
+    }
+
+    function startMode() {
+        var handler = modeHandlerMapping[modes[modePointer]];
+        handler.config.start();
+    }
+
+    function finishMode() {
+        var handler = modeHandlerMapping[modes[modePointer]];
+        handler.config.finish();
+    }
+
+    function nextMode() {
+        finishMode();
+        modePointer += 1;
+        modePointer %= modes.length;
+        startMode();
+    }
+
+    function prevMode() {
+        finishMode();
+        modePointer -= 1;
+        // %= operator doesn't move negatives into 0, modes.length-1
+        if (modePointer < 0) {
+            modePointer += modes.length;
+        }
+        startMode();
+    }
+
+    // TODO: switchMode(toModeName);
+
+    function cb(data) {
+        try {
+            var handler = modeHandlerMapping[modes[modePointer]];
+            handler.handle(data);
+        } catch(err) {
+            if (!errorLogged) {
+                WS.log("Invalid mode at index " + modePointer);
+                console.log(err);
+                errorLogged = true;
+            }
+        }
+    }
+
+    function onGesture(gesture) {
+        WS.log("WearENV.onGesture: " + gesture);
+        if (gesture === 'SWIPE_LEFT') {
+            prevMode();
+        } else if (gesture === 'SWIPE_RIGHT') {
+            nextMode();
+        } else if (gesture === 'TAP') {
+            WS.say("TAP");
+        } else if (gesture === 'TWO_TAP') {
+            togglePlaygroundSensorLog();            
+            WS.log("Toggle remote sensor log, now " + log);
+        } else {
+            WS.say(gesture.replace('_', ' '));
+        }
+
+    }
+
+    function ModeHandler(name, options) {
+        this.config = {
+            name: name,
+            prettyName: name,
+            showMode: true,
+            drawCallback: function() {},
+            start: this.defaultStart,
+            finish: this.defaultFinish,
+            parentHandler: this
+        };
+
+        if (options !== undefined) {
+            extend(this.config, options);
+        }
+        console.log("Set prettyName to " + this.config.prettyName);
+
+        registerModeHandler(this);
+    }
+
+    ModeHandler.prototype.handle = function(data) {   
+        this.config.drawCallback(data);
+        if (this.config.showMode) drawModeName(this.config.prettyName);
+    }
+
+    function registerModeHandler(modeHandler) {
+        WS.log("Registering mode " + modeHandler.config.name);
+        modes.push(modeHandler.config.name);
+        modeHandlerMapping[modeHandler.config.name] = modeHandler;
+    }
+
+    // DRAWING
+
+    function clearCanvas() {
+        context.fillStyle = "rgb(0, 0, 0)";
+        context.fillRect(0, 0, 640, 360);
+    }
+
+    function drawModeName(name) {
+        upperBase = 40;
+        context.fillStyle = "rgb(200,200,200)";
+        context.font = '28pt Calibri';
+        context.textAlign = 'left';
+        context.fillText(name, 10, upperBase);
+    }
+
+    // TODO: make title and subtitle ENV parameters
+    function drawTitlePage() {
+        var upperBase = 40;
+        var titleBase = 170;
+        var subtitleBase = 240;
+        context.fillStyle = '#000000';
+        context.fillRect(0, 0, 640, 360);
+        context.font = '64pt Calibri';
+        context.fillStyle = '#FFFFFF';
+        context.fillText('Sensor Explorer', 35, titleBase);
+        context.font = '28pt Calibri';
+        context.fillText('Swipe through to explore!', 175, subtitleBase);
+    }
+
+    function togglePlaygroundSensorLog() {
+        if (log) {
+            WS.say("Playground sensor log off");
+            WS.log("Turning off playground sensor logging.");
+            log = false;
+            WS.dataLog(false, log, .15);
+        } else {
+            WS.say("Playground sensor log on");
+            WS.log("Turning on playground sensor logging.");
+            log = true;
+            if (!serverConnected) {
+                WS.serverConnect('{{WSUrl}}', 'WearENV.server');
+            } else {
+                WS.dataLog(false, log, .15);
+            }
+        }
+    }
+
+    // I don't see a way to disconnect? Maybe call connect with null args?
+    function server() {
+        serverConnected = true;
+        WS.dataLog(false, log, .15);
+    }
+    // END GENERIC BOILERPLATE
+
+    // BEGIN APP STUFF INCLUDING OVERRIDES
+
+
+    // this is really the default for an orientation SensorModeHandler
+    //@override
+    ModeHandler.prototype.defaultStart = function() {
+        canvas = document.getElementById('wearCanvas');
+        context = canvas.getContext('2d');
+        WS.sensorOn(WS.sensor('orientation'), .15, 'WearENV.cb');
+        if (log) {
+            WS.serverConnect('{{WSUrl}}', 'WearENV.server');
+        }
+        console.log(this);
+        if (DBG) console.log("Initializing " + this.config.prettyName + " mode 2345234");
+        WS.say(this.config.prettyName + "mode");
+        clearCanvas();
+        drawModeName(this.config.prettyName);
+        modeInit = true;
+        errorLogged = false;
+    };
+
+    //@override
+    ModeHandler.prototype.defaultFinish = function() {
+        WS.sensorOff(WS.sensor('orientation'));
+        modeInit = false;
+    }
+
+    // welcomeHandlerName is special because it's called by
+    //   startEnv
+    new ModeHandler(welcomeHandlerName, {
+        prettyName: "Welcome!",
+        start: function() {
+            canvas = document.getElementById('wearCanvas');
+            context = canvas.getContext('2d');
+            drawTitlePage();
+            if (!envStarted) {
+                WS.say("Starting Sensor Explorer");
+                WS.sound('SUCCESS');
+            }
+            envStarted = true;
+        },
+        finish: function() {}
+    });
+
+    var orientationDrawCB = function(data) {
+        if (data['type'] == WS.sensor('orientation')) {
+            context.fillStyle = 'hsl(' + data['values'][0] + ', 90%, 50%)'
+            context.fillRect(0, 0, 640, 120);
+            context.fillStyle = 'hsl(' + data['values'][1] + ', 90%, 50%)'
+            context.fillRect(0, 120, 640, 120);
+            context.fillStyle = 'hsl(' + data['values'][2] + ', 90%, 50%)'
+            context.fillRect(0, 240, 640, 120);
+        }
+    }
+
+    new ModeHandler("orientation", {
+            prettyName: "Orientation explorer", 
+            drawCallback: orientationDrawCB,
+            start: function() {
+                // other stuff you might want to do HERE
+                // note that including "start" here does nothing unless
+                // you add other stuff.
+                this.parentHandler.defaultStart();
+            },        
+    });
+
+    // "this" refers to the config object of the Handler
+    function sensorStartFn(sensorName) {
+        return function() {
+            canvas = document.getElementById('wearCanvas');
+            context = canvas.getContext('2d');
+            WS.sensorOn(WS.sensor(sensorName), .15, 'WearENV.cb');
+            if (log) {
+                WS.serverConnect('{{WSUrl}}', 'WearENV.server');
+            }
+            console.log(this.parentHandler);
+            if (DBG) console.log("Initializing " + this.prettyName + " mode 2345234");
+            WS.say(this.prettyName + "mode");
+            clearCanvas();
+            drawModeName(this.prettyName);
+            modeInit = true;
+            errorLogged = false;
+        }
+    }
+
+    // do the same thing as above except not defined in default
+    new ModeHandler("orientation2", {
+            prettyName: "Orientation explorer 2", 
+            drawCallback: orientationDrawCB,
+            // in here, "this" refers to the config object
+            // and if you want to get to the Handler itself, this.parentHandler
+            start: function() {
+                canvas = document.getElementById('wearCanvas');
+                context = canvas.getContext('2d');
+                WS.sensorOn(WS.sensor('orientation'), .15, 'WearENV.cb');
+                if (log) {
+                    WS.serverConnect('{{WSUrl}}', 'WearENV.server');
+                }
+                console.log(this.parentHandler);
+                if (DBG) console.log("Initializing " + this.prettyName + " mode 2345234");
+                WS.say(this.prettyName + "mode");
+                clearCanvas();
+                drawModeName(this.prettyName);
+                modeInit = true;
+                errorLogged = false;
+                // this.parentHandler.defaultStart();
+            }        
+    });
+
+    // do the same thing as above except not defined in default
+    new ModeHandler("orientation3", {
+            prettyName: "Orientation explorer 3", 
+            drawCallback: orientationDrawCB,
+            // in here, "this" refers to the config object
+            // and if you want to get to the Handler itself, this.parentHandler
+            start: sensorStartFn('orientation')
+    });
+
+    // // MAGNETOMETER
+    // new ModeHandler("magnetometer", {
+    //     prettyName: "Magnetometer Explorer",
+    //     drawCallback: 
+    // })
+
+    return {
+        onGesture: onGesture,
+        start: startEnv,
+        cb: cb,
+        server: server
+    };
+})();
+
+$(function () {
+    if (WS.scriptVersion(0)) return;
+    WS.displayWebView();
+    WS.gestureCallback('onGesture', 'WearENV.onGesture');
+    WearENV.start();
+});
+
+</script>
+</body>
+</html>
