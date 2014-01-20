@@ -1,0 +1,23 @@
+{
+  "name": "Sensor Explorer",
+  "authors": [
+    "scottgwald"
+  ],
+
+  "description": "Swipe through modes where values from each sensor are representated as colors.",
+  "screenshots": [
+  ],
+
+  "require": [
+  ],
+
+  "includes": [
+  ],
+
+  "tags": [
+    "sensors"
+  ],
+
+  "video": "",
+  "remixes": ""
+}
