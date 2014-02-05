@@ -6,23 +6,22 @@ module Collector
   class Gist
     def self.do id
       gist = JSON.parse connection.get(id).body
-      description = gist['description']
-      unless /\[wearscript\] (.*)/.match description
+      unless /\[wearscript\] (.*)/.match gist['description']
         raise "gist[#{id}]: Does not have necessary [wearscript] prefix in description"
       end
       user = gist['user']
-      #url = user['url']
-      #avatar_url = user['avatar_url']
+
       manifest = JSON.parse gist['files']['manifest.json']['content']
-      manifest['description'] = description
+      manifest['description'] = gist['description'][13..-1]
       manifest['id'] = id
+      manifest['source_uri'] = gist['html_url']
       manifest['authors'] = [
         {
           github: user['login'],
-          url: user['html_url']
+          url: user['html_url'],
+          avatar_url: user['avatar_url'],
         }
       ]
-      manifest['tags'] = []
 
       FileUtils.cd 'scripts' do
         FileUtils.rm_rf id

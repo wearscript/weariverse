@@ -29,8 +29,9 @@ end
 def get_app name
   data = get_json "scripts/#{name}/manifest.json"
   data['app_uri'] = "https://s3.amazonaws.com/#{S3_BUCKET}/#{name}"
-  data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/tree/master/scripts/#{name}"
-  data['features'] = []
+  data['source_uri'] = "https://github.com/#{WS_REPO_NAME}/tree/master/scripts/#{name}" unless data['source_uri']
+  data['features'] = [] unless data['features']
+  data['tags'] = [] unless data['tags']
   data['tags'].each do |t|
     if Builder::Script.FEATURES.include? t
       data['features'] << t
