@@ -4,9 +4,10 @@ require 'json'
 require 'yaml'
 require 'pry'
 require_relative 'lib/builder'
+require_relative 'lib/collector'
 WS_REPO_NAME="OpenShades/weariverse"
 S3_BUCKET="weariverse"
-task :default => [:yml, :sync, :apks]
+task :default => [:collect, :yml, :sync, :apks]
 
 desc "Build apps yml"
 task :yml do
@@ -152,4 +153,13 @@ desc "Submit PR"
 task :submit, :script do |t, args|
   name = args[:script]
   Builder::Script.new(name).submit
+end
+
+desc "Collect Gists"
+task :collect do
+  gist_ids = [
+    '8745893',
+    '8741534',
+  ]
+  gist_ids.each {|id| puts "Collecting #{id}"; Collector::Gist.do id}
 end
