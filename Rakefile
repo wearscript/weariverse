@@ -158,9 +158,6 @@ end
 
 desc "Collect Gists"
 task :collect do
-  gist_ids = [
-    '8745893',
-    '8741534',
-  ]
+  gist_ids = JSON.parse(File.read("gists.json"))["ids"]
   gist_ids.each {|id| puts "Collecting #{id}"; Collector::Gist.do id}
 end
