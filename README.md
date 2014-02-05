@@ -5,6 +5,9 @@ So you want to share your scripts with other WearScript users? This is the repos
 
 ##Adding Your Script
 
+###The Best Way
+1. Put your script in a gist and add the gist ID to `gists.json`
+
 ###The Snazzy Way
 To use our snazzy tools, you must have Ruby installed on your machine. Quickest method is RVM: `curl -sSL https://get.rvm.io | bash -s stable`
 We also recomend you install hub, on OS X with brew, do `brew install hub`. On Linux, check your repositories. Worst case, `gem install hub`
@@ -25,8 +28,12 @@ We also recomend you install hub, on OS X with brew, do `brew install hub`. On L
 
 ##Compiling
 
-Running `rake apps` will generate `scripts.yml` which can then be copied over to the site builder and used to update it.
+1. `bundle install` if you haven't recently
+2. `rake apps`
+3. All app data is now in scripts.yml
 
 ##Syncing to S3
 
-Running `rake` will rebuild the YAML and sync all `index.html` files to the S3 bucket.
+1. `bundle install` if you haven't recently
+2. Make sure your credentials are environmental variables at `AWS_ID` and `AWS_SECRET`
+3. `rake`
