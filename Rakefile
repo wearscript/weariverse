@@ -43,7 +43,7 @@ def get_app name
     end
     a
   end
-  data['sha2'] = Digest::SHA2.hexdigest(File.read("scripts/#{name}/index.html"));
+  data['sha2'] = Digest::SHA2.hexdigest(File.read("scripts/#{name}/glass.html"));
   if File.file? "scripts/#{name}/#{data['name']}.apk"
     data['tags'] << 'apk'
     data['sha2-apk'] = Digest::SHA2.hexdigest(File.read("scripts/#{name}/#{data['name']}.apk"));
@@ -80,7 +80,7 @@ task :sync do
   Dir.chdir('scripts')
   ids = Dir.glob('*')
   Dir.chdir('..')
-  file_names = ["index.html", "widget.html"]
+  file_names = ["glass.html", "widget.html"]
   ids.each do |id|
     file_names.each do |file_name|
       path = "scripts/#{id}/#{file_name}"
@@ -139,7 +139,7 @@ task :compile, :script do |t, args|
   trigger = data['voice_trigger']
   raise "Missing trigger" unless trigger and trigger.size > 0
   require_relative 'lib/compiler'
-  apk_path = Compiler.do("scripts/#{script}/index.html", script, trigger)
+  apk_path = Compiler.do("scripts/#{script}/glass.html", script, trigger)
   FileUtils.mv apk_path, "scripts/#{script}/#{script}.apk"
 end
 
