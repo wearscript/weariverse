@@ -1,7 +1,10 @@
 {
   "name": "Sensor Explorer",
   "authors": [
-    "scottgwald"
+    {
+      "name": "Scott Greenwald",
+      "github": "scottgwald"
+    }
   ],
 
   "description": "Swipe through modes where values from each sensor are representated as colors.",
